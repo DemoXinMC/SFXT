@@ -9,9 +9,14 @@ namespace SFXT.Components.Graphics
     public class BasicSprite : Graphic, IBatchable
     {
         private ITexels texture;
+        private SFML.Graphics.VertexBuffer vbo;
         private SFML.Graphics.Sprite sfSprite;
 
-        public BasicSprite(Entity entity) : base(entity) {}
+        public BasicSprite(Entity entity, ITexels texture) : base(entity)
+        {
+            this.texture = texture;
+            this.vbo = new VertexBuffer(6, PrimitiveType.Triangles, VertexBuffer.UsageSpecifier.Dynamic);
+        }
 
         public override void Draw(RenderTarget target)
         {
@@ -34,7 +39,8 @@ namespace SFXT.Components.Graphics
         {
             get
             {
-                var verts = new VertexArray(PrimitiveType.Points, 6);
+                var verts = new VertexArray(PrimitiveType.Triangles, 6);
+                
                 return verts;
             }
         }

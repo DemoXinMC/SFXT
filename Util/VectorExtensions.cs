@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SFXT.Util
 {
-    public static class Extensions
+    public static class VectorExtensions
     {
         public static double DistanceTo(this SFML.System.Vector2i obj, SFML.System.Vector2i other)
         {

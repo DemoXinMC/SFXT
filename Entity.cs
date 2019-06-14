@@ -6,6 +6,17 @@ namespace SFXT
 {
     public class Entity
     {
+        public Entity()
+        {
+            this.Transform = new SFML.Graphics.Transform();
+            this.Position = new SFML.System.Vector2f();
+        }
+
+        public Entity(int x, int y) : this()
+        {
+            this.Position = new SFML.System.Vector2f(x, y);
+        }
+
         public float X
         {
             get => this.Position.X;
@@ -18,34 +29,51 @@ namespace SFXT
             set => this.Position.Y = value;
         }
 
-        public float OriginX
-        {
-            get => this.Origin.X;
-            set => Math.Min(value, this.SizeX);
-        }
-
-        public float OriginY
-        {
-            get => this.Origin.Y;
-            set => Math.Min(value, this.SizeY);
-        }
-
         public float SizeX { get => this.Size.X; }
         public float SizeY { get => this.Size.Y; }
 
         public SFML.System.Vector2f Position;
-        public SFML.System.Vector2f Origin;
         public SFML.System.Vector2f Size
         {
             get
             {
-                return new SFML.System.Vector2f(0, 0);
+                var globalBounds = this.GlobalBounds;
+                return new SFML.System.Vector2f(globalBounds.Width, globalBounds.Height);
             }
         }
-        public float Rotation { get; protected set; }
-        public float Scale { get; protected set; }
 
-        public int Layer { get; private set; }
+        public SFML.Graphics.IntRect GlobalBounds
+        {
+            get
+            {
+                return new SFML.Graphics.IntRect(0, 0, 0, 0);
+            }
+        }
+
+        public SFML.Graphics.Transform Transform { get; protected set; }
+
+        private float _rotation;
+        public float Rotation
+        {
+            get => this._rotation;
+            set
+            {
+                this._rotation = value;
+                this.Transform.Rotate(value);
+            }
+        }
+
+        private float _scale;
+        public float Scale
+        {
+            get => this._scale;
+            set {
+                this._scale = value;
+                this.Transform.Scale(new SFML.System.Vector2f(value, value));
+            }
+        }
+
+        public int Layer { get; set; }
 
         private List<Component> components;
         public void AddComponent(Component component)
