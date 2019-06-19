@@ -27,7 +27,8 @@ namespace SFXT.Components.Graphics
 
         public override void Draw(RenderTarget target)
         {
-            throw new Exception("Don't call raw Draw() on BasicSprite");
+            this.updateVAO();
+            target.Draw(this.vao);
             /*
             if(this.sfSprite == null)
             {
