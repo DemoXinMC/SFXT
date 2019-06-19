@@ -62,5 +62,15 @@ namespace SFXT.Util
             var y = this.Y - other.Y;
             return Vector2.Normalize(new Vector2(x, y));
         }
+
+        public Vector2 RotateAround(Vector2 origin, double angle)
+        {
+            angle = (angle) * (Math.PI / 180);
+
+            var rotatedX = Math.Cos(angle) * (this.X - origin.X) - Math.Sin(angle) * (this.Y - origin.Y) + origin.X;
+            var rotatedY = Math.Sin(angle) * (this.X - origin.X) + Math.Cos(angle) * (this.Y - origin.Y) + origin.Y;
+
+            return new Vector2(rotatedX, rotatedY);
+        }
     }
 }
