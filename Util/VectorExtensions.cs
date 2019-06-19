@@ -43,5 +43,15 @@ namespace SFXT.Util
             z *= z;
             return Math.Sqrt(x + y + z);
         }
+
+        public static double AngleTo(this SFML.System.Vector2f vector, Vector2 other) => Vector2.AngleTo(vector, other);
+        public static double AngleTo(this SFML.System.Vector2i vector, Vector2 other) => Vector2.AngleTo(vector, other);
+        public static double AngleTo(this SFML.System.Vector2u vector, Vector2 other) => Vector2.AngleTo(vector, other);
+        public static Vector2 Normalize(this SFML.System.Vector2f vector) => Vector2.Normalize(vector);
+        public static Vector2 Normalize(this SFML.System.Vector2i vector) => Vector2.Normalize(vector);
+        public static Vector2 Normalize(this SFML.System.Vector2u vector) => Vector2.Normalize(vector);
+        public static Vector2 DirectionTo(this SFML.System.Vector2f vector, Vector2 other) => Vector2.DirectionTo(vector, other);
+        public static Vector2 DirectionTo(this SFML.System.Vector2i vector, Vector2 other) => Vector2.DirectionTo(vector, other);
+        public static Vector2 DirectionTo(this SFML.System.Vector2u vector, Vector2 other) => Vector2.DirectionTo(vector, other);
     }
 }
