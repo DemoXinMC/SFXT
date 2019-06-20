@@ -6,7 +6,11 @@ namespace SFXT.Graphics
 {
     abstract public class Graphic : Component
     {
-        public bool Relative = true;
+        public bool Relative { get; set; }
+
+        public bool FlipHorizontal { get; set; }
+
+        public bool FlipVertical { get; set; }
         public int Layer
         {
             get
@@ -23,6 +27,11 @@ namespace SFXT.Graphics
         private int layer = 0;
         public abstract void Draw(SFML.Graphics.RenderTarget target);
 
-        public Graphic(Entity entity) : base(entity) { }
+        public Graphic(Entity entity) : base(entity)
+        {
+            this.Relative = true;
+            this.FlipHorizontal = false;
+            this.FlipVertical = false;
+        }
     }
 }
