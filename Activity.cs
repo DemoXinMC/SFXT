@@ -98,11 +98,15 @@ namespace SFXT
 
         public virtual void Render(RenderTarget target, RenderStates states)
         {
-            this.entities.OrderBy(kvp => kvp.Value.Layer);
-
+            List<Graphic> graphicComponents = new List<Graphic>(this.entities.Count);
             foreach (var entity in this.entities.Values)
-                foreach(var component in entity.GetComponents<Graphic>())
-                    this.spriteBatch.Add(component);
+                foreach (var component in entity.GetComponents<Graphic>())
+                    graphicComponents.Add(component);
+
+            graphicComponents.OrderBy(item => item.Layer);
+
+            foreach (var graphic in graphicComponents)
+                this.spriteBatch.Add(graphic);
 
             spriteBatch.Draw(target, states);
         }
