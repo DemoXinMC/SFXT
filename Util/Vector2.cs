@@ -72,5 +72,7 @@ namespace SFXT.Util
 
             return new Vector2(rotatedX, rotatedY);
         }
+
+        public static Vector2 operator* (Vector2 vector, double amount) => new Vector2(vector.X * amount, vector.Y * amount);
     }
 }

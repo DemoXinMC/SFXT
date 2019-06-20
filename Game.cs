@@ -79,7 +79,8 @@ namespace SFXT
             set
             {
                 this.fps = value;
-                this.Window?.SetFramerateLimit(value);
+                if(value > 0)
+                    this.Window?.SetFramerateLimit(value);
             }
         }
         private uint fps;
@@ -143,9 +144,9 @@ namespace SFXT
             {
                 while(this.GameTime.ElapsedTime > updateTime)
                 {
-                    Console.WriteLine("Elapsed Time: " + updateClock.ElapsedTime.AsMilliseconds());
                     this.updateTimes.Enqueue(updateClock.ElapsedTime);
-                    this.Delta = updateClock.Restart().AsSeconds();
+                    this.Delta = updateClock.ElapsedTime.AsSeconds();
+                    updateClock.Restart();
                     this.Update();
                     updateTime += tickTimer;
                 }
@@ -231,6 +232,9 @@ namespace SFXT
             var videoMode = new SFML.Window.VideoMode((uint)this.Dimensions.X, (uint)this.Dimensions.Y);
             this.Window = new SFML.Graphics.RenderWindow(videoMode, this.Title, this.Fullscreen ? SFML.Window.Styles.Fullscreen : SFML.Window.Styles.None);
             this.Window.Position = this.Location == null ? this.Location : new Vector2i((int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Width / 2) - (videoMode.Width / 2)), (int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Height / 2) - (videoMode.Height / 2)));
+
+            if(this.FPS > 0)
+                this.Window.SetFramerateLimit(this.FPS);
 
             this.WindowCreated?.Invoke(videoMode.Width, videoMode.Height);
             this.Window.Display();

@@ -44,8 +44,8 @@ namespace SFXT.Components.Graphics
             this.vao[2] = new Vertex(bottomRight, this.Color, this.texture.BottomRight);
 
             this.vao[3] = new Vertex(topLeft, this.Color, this.texture.TopLeft);
-            this.vao[4] = new Vertex(bottomLeft, this.Color, this.texture.BottomLeft);
-            this.vao[5] = new Vertex(bottomRight, this.Color, this.texture.BottomRight);
+            this.vao[5] = new Vertex(bottomLeft, this.Color, this.texture.BottomLeft);
+            this.vao[4] = new Vertex(bottomRight, this.Color, this.texture.BottomLeft);
         }
 
         public RenderStates? BatchRenderStates { get => null; }

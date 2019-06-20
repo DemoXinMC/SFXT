@@ -59,7 +59,7 @@ namespace SFXT.Graphics
                 if(batchableState == null)
                     batchableState = states;
 
-                if(batchableState.Value.Texture != batchable.BatchTexture)
+                if(batchable.BatchTexture != currentState.Texture)
                     drawBatch = true;
 
                 if(batchableState.Value.BlendMode != currentState.BlendMode)
