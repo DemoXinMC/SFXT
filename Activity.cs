@@ -15,7 +15,7 @@ namespace SFXT
         private List<Entity> entitiesToAdd;
         private List<Entity> entitiesToRemove;
 
-        public ViewManager ViewManager { get; protected set; }
+        public CameraManager CameraManager { get; protected set; }
 
         public bool AddEntity(Entity entity)
         {
@@ -74,7 +74,7 @@ namespace SFXT
 
             this.Game = game;
             this.spriteBatch = new SpriteBatch();
-            this.ViewManager = new ViewManager(this);
+            this.CameraManager = new CameraManager(this);
         }
 
         public virtual void Update()
@@ -106,6 +106,8 @@ namespace SFXT
                 foreach (var component in entity.GetComponents<Graphic>())
                     graphicComponents.Add(component);
 
+            this.CameraManager.Update();
+
             // Maybe switch this to a predicate to allow more use of the "Generic" Activity
             graphicComponents.OrderBy(item => item.Layer);
 
@@ -119,7 +121,7 @@ namespace SFXT
             }
 
             var previousView = this.Game.Window.GetView();
-            foreach (var view in this.ViewManager.Views)
+            foreach (var view in this.CameraManager.Views)
             {
                 this.Game.Window.SetView(view.View);
                 spriteBatch.Draw(this.Game.Window, view.RenderStates);

@@ -1,16 +1,18 @@
-﻿using System;
+﻿using SFXT.Util;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace SFXT.Graphics
 {
-    public class ViewManager
+    public class CameraManager
     {
         private Activity activity;
         private Dictionary<string, Camera> cameras;
 
         private Dictionary<Camera, Entity> chaseCams;
         private Dictionary<Camera, CameraShake> shakyCams;
+        private Dictionary<Camera, CameraMotion> movingCams;
 
         public Camera[] Views
         {
@@ -22,7 +24,7 @@ namespace SFXT.Graphics
             }
         }
 
-        public ViewManager(Activity activity)
+        public CameraManager(Activity activity)
         {
             this.activity = activity;
 
@@ -30,6 +32,8 @@ namespace SFXT.Graphics
             cameras.Add("Default", new Camera(this.activity.Game.Window.Size.X, this.activity.Game.Window.Size.Y));
 
             chaseCams = new Dictionary<Camera, Entity>();
+            shakyCams = new Dictionary<Camera, CameraShake>();
+            movingCams = new Dictionary<Camera, CameraMotion>();
         }
 
         public void Update()
@@ -42,6 +46,11 @@ namespace SFXT.Graphics
             foreach(var shakyCam in shakyCams)
             {
                 // do camera shake here
+            }
+
+            foreach(var movingCam in movingCams)
+            {
+
             }
         }
 
@@ -77,13 +86,43 @@ namespace SFXT.Graphics
                 this.View = new SFML.Graphics.View(new SFML.System.Vector2f(0, 0), new SFML.System.Vector2f(width, height));
                 this.RenderStates = new SFML.Graphics.RenderStates();
                 this.RenderTexture = new SFML.Graphics.RenderTexture(width, height);
+                this.RenderTexture.SetView(this.View);
             }
+
+            public void MoveTo(float x, float y)
+            {
+                this.View.Center = new SFML.System.Vector2f(x, y);
+            }
+
+            public void MoveTo(Entity entity)
+            {
+                this.View.Center = entity.Position;
+            }
+
+            public void Move(float x, float y)
+            {
+                this.View.Center = this.View.Center + new Vector2(x, y);
+            }
+
+            public void Move(Vector2 vector)
+            {
+                this.View.Center = this.View.Center + vector;
+            }
+        }
+
+        public class CameraMotion
+        {
+            public Vector2 Destination;
+            public double Angle;
+            public SFML.System.Time Duration;
+            public SFML.System.Clock Timer;
         }
 
         public class CameraShake
         {
             public uint Intensity;
             public SFML.System.Time Duration;
+            public SFML.System.Clock Timer;
         }
     }
 }
