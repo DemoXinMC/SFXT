@@ -1,4 +1,5 @@
-﻿using SFXT.Graphics;
+﻿using SFML.Graphics;
+using SFXT.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,12 +79,12 @@ namespace SFXT
             foreach(var entity in this.entitiesToAdd)
             {
                 this.entities.Add(this.nextEntityId, entity);
-                this.OnEntityAdded(entity);
+                this.OnEntityAdded?.Invoke(entity);
             }
 
             foreach (var item in this.entities.Where(kvp => this.entitiesToRemove.Contains(kvp.Value)).ToList())
             {
-                this.OnEntityRemoved(item.Value);
+                this.OnEntityRemoved?.Invoke(item.Value);
                 this.entities.Remove(item.Key);
             }
 
@@ -93,16 +94,17 @@ namespace SFXT
             foreach(var entity in this.entities.Values)
                 entity.Update();
 
-            
         }
 
-        public virtual void Render()
+        public virtual void Render(RenderTarget target, RenderStates states)
         {
             this.entities.OrderBy(kvp => kvp.Value.Layer);
 
             foreach (var entity in this.entities.Values)
                 foreach(var component in entity.GetComponents<Graphic>())
                     this.spriteBatch.Add(component);
+
+            spriteBatch.Draw(target, states);
         }
 
         public virtual bool ShouldBelowActivitiesUpdate() { return false; }

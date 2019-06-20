@@ -20,7 +20,7 @@ namespace SFXT
         private string title;
 
         /// <summary>The raw SFML Window for the Game.</summary>
-        public SFML.Window.Window Window { get; private set; }
+        public SFML.Graphics.RenderWindow Window { get; private set; }
 
         public bool Fullscreen
         {
@@ -282,9 +282,10 @@ namespace SFXT
             }
 
             foreach(var activity in renderList.Reverse())
-                activity.Render();
+                activity.Render(this.Window, new SFML.Graphics.RenderStates());
 
             this.OnRenderEnd?.Invoke();
+            this.Window.Display();
         }
 
         public delegate void WindowCreatedHandler(uint width, uint height);
