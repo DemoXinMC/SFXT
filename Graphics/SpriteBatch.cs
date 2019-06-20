@@ -28,12 +28,14 @@ namespace SFXT.Graphics
         /// <param name="graphic">The Graphic to enqueue.</param>
         public void Add(Graphic graphic) => this.graphicList.Add(graphic);
 
+        public void Clear() => this.graphicList.Clear();
+
         /// <summary>
         /// SFML's Drawable.Draw implementation.  Processes the currently loaded Graphics into the RenderTarget, then clears itself out.
         /// </summary>
         /// <param name="target">A RenderTarget to draw to</param>
         /// <param name="states">The RenderStates that the SpriteBatch will attempt to return to as it draws</param>
-        public void Draw(RenderTarget target, RenderStates states)
+        public void Draw(RenderTarget target, RenderStates states, bool clearGraphicList = true)
         {
             RenderStates currentState = new RenderStates(states);
 

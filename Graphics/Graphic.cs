@@ -32,6 +32,9 @@ namespace SFXT.Graphics
             this.Relative = true;
             this.FlipHorizontal = false;
             this.FlipVertical = false;
+            this.RequirePerCameraBatching = false;
         }
+
+        public bool RequirePerCameraBatching { get; protected set; }
     }
 }
