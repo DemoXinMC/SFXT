@@ -141,7 +141,7 @@ namespace SFXT
 
             while (this.Window != null)
             {
-                while(updateClock.ElapsedTime > updateTime)
+                while(this.GameTime.ElapsedTime > updateTime)
                 {
                     Console.WriteLine("Elapsed Time: " + updateClock.ElapsedTime.AsMilliseconds());
                     this.updateTimes.Enqueue(updateClock.ElapsedTime);

@@ -13,12 +13,13 @@ namespace SFXT.Components.Graphics
         protected ITexels texture;
         protected VertexArray vao;
 
-        public Color Color{ get; set; }
+        public Color Color { get; set; }
 
         public BasicSprite(Entity entity, ITexels texture) : base(entity)
         {
             this.texture = texture;
             this.vao = new VertexArray(PrimitiveType.Triangles, 6);
+            this.Color = Color.White;
         }
 
         public override void Draw(RenderTarget target)
