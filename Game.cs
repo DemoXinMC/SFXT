@@ -187,6 +187,38 @@ namespace SFXT
 
         private Stack<Activity> activities;
 
+        public delegate void ActivityHandler(Activity activity);
+        public event ActivityHandler OnActivityPush;
+        public event ActivityHandler OnActivityPop;
+
+        public void PushActivity(Activity activity)
+        {
+            this.OnActivityPush?.Invoke(activity);
+            this.activities.Push(activity);
+        }
+
+        public Activity PopActivity()
+        {
+            var activity = this.activities.Pop();
+            this.OnActivityPop?.Invoke(activity);
+
+            return activity;
+        }
+
+        public Activity PopTo(Activity target)
+        {
+            if (!this.activities.Contains(target))
+                return null;
+
+            while(this.activities.Peek() != target)
+            {
+                var popped = this.activities.Pop();
+                this.OnActivityPop?.Invoke(popped);
+            }
+
+            return this.activities.Peek();
+        }
+
         private void CreateWindow()
         {
             this.Window?.Close();

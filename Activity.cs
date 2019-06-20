@@ -14,6 +14,47 @@ namespace SFXT
         private List<Entity> entitiesToAdd;
         private List<Entity> entitiesToRemove;
 
+        public bool AddEntity(Entity entity)
+        {
+            bool cancel = false;
+
+            this.OnEntityQueuedAdd?.Invoke(entity, ref cancel);
+
+            if(!cancel)
+                entitiesToAdd.Add(entity);
+
+            return !cancel;
+        }
+
+        public bool RemoveEntity(Entity entity)
+        {
+            bool cancel = false;
+
+            this.OnEntityQueuedRemove?.Invoke(entity, ref cancel);
+
+            if (!cancel)
+                entitiesToRemove.Add(entity);
+
+            return !cancel;
+        }
+
+        public bool RemoveEntity(uint entityId)
+        {
+            bool cancel = false;
+
+            var success = this.entities.TryGetValue(entityId, out Entity entity);
+
+            if (!success)
+                return false;
+
+            this.OnEntityQueuedRemove?.Invoke(entity, ref cancel);
+
+            if (!cancel)
+                entitiesToRemove.Add(entity);
+
+            return !cancel;
+        }
+
         private uint nextEntityId
         {
             get { return nextEntityIdInternal++; }
@@ -67,10 +108,12 @@ namespace SFXT
         public virtual bool ShouldBelowActivitiesUpdate() { return false; }
         public virtual bool ShouldBelowActivitiesRender() { return false; }
 
-        #region Events
         public delegate void EntityEventHandler(Entity entity);
         public event EntityEventHandler OnEntityAdded;
         public event EntityEventHandler OnEntityRemoved;
-        #endregion
+
+        public delegate bool EntityEventCancellable(Entity entity, ref bool cancel);
+        public event EntityEventCancellable OnEntityQueuedAdd;
+        public event EntityEventCancellable OnEntityQueuedRemove;
     }
 }
