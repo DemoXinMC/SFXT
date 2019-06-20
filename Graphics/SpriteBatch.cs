@@ -35,7 +35,7 @@ namespace SFXT.Graphics
         /// <param name="states">The RenderStates that the SpriteBatch will attempt to return to as it draws</param>
         public void Draw(RenderTarget target, RenderStates states)
         {
-            RenderStates currentState = states;
+            RenderStates currentState = new RenderStates(states);
 
             VertexArray drawing = new VertexArray(PrimitiveType.Triangles, (uint)this.graphicList.Count * 6);
             uint drawingIndex = 0;
@@ -48,6 +48,7 @@ namespace SFXT.Graphics
                 {
                     target.Draw(drawing, currentState);
                     drawing.Clear();
+                    drawingIndex = 0;
                     graphic.Draw(target);
                     continue;
                 }
@@ -73,9 +74,16 @@ namespace SFXT.Graphics
                     target.Draw(drawing, currentState);
                     drawing.Clear();
                     drawingIndex = 0;
-                    RenderStates? newState = batchable.BatchRenderStates;
-                    currentState = newState ?? currentState;
-                    currentState.Texture = batchable.BatchTexture;
+
+                    RenderStates newState;
+
+                    if (batchable.BatchRenderStates != null)
+                        newState = new RenderStates(batchable.BatchRenderStates.Value);
+                    else
+                        newState = new RenderStates(states);
+
+                    newState.Texture = batchable.BatchTexture;
+                    currentState = newState;
                 }
 
                 var batchVertexes = batchable.BatchVertexes;
@@ -91,7 +99,8 @@ namespace SFXT.Graphics
                 for (uint i = 0; i < batchVertexes.VertexCount; i++)
                     drawing[drawingIndex++] = batchVertexes[i];
 
-                target.Draw(batchVertexes);
+                target.Draw(batchVertexes, currentState);
+                //graphic.Draw(target);
             }
 
             target.Draw(drawing, currentState);
