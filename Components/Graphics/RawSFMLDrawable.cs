@@ -8,8 +8,8 @@ namespace SFXT.Components.Graphics
 {
     public class RawSFMLDrawable : Graphic
     {
-        private SFML.Graphics.Drawable drawable;
-        private RenderStates? renderStates;
+        public SFML.Graphics.Drawable drawable { get; private set; }
+        public RenderStates? renderStates { get; private set; }
         public RawSFMLDrawable(Entity entity, SFML.Graphics.Drawable drawable) : base(entity)
         {
             this.drawable = drawable;
