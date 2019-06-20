@@ -18,9 +18,9 @@ namespace SFXT.Graphics.Texels
         public ushort Width { get => (ushort)this.Texture.Size.X; }
         public ushort Height { get => (ushort)this.Texture.Size.Y; }
 
-        public Vector2i TopLeft { get => new Vector2i(0, 0); }
-        public Vector2i TopRight { get => new Vector2i(this.Width, 0); }
-        public Vector2i BottomLeft { get => new Vector2i(0, this.Height); }
-        public Vector2i BottomRight { get => new Vector2i(this.Width, this.Height); }
+        public Vector2f TopLeft { get => new Vector2f(0, 0); }
+        public Vector2f TopRight { get => new Vector2f(this.Width, 0); }
+        public Vector2f BottomLeft { get => new Vector2f(0, this.Height); }
+        public Vector2f BottomRight { get => new Vector2f(this.Width, this.Height); }
     }
 }

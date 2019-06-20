@@ -11,9 +11,9 @@ namespace SFXT.Graphics
         ushort OffsetY { get; }
         ushort Width { get; }
         ushort Height { get; }
-        SFML.System.Vector2i TopLeft { get; }
-        SFML.System.Vector2i TopRight { get; }
-        SFML.System.Vector2i BottomLeft { get; }
-        SFML.System.Vector2i BottomRight { get; }
+        SFML.System.Vector2f TopLeft { get; }
+        SFML.System.Vector2f TopRight { get; }
+        SFML.System.Vector2f BottomLeft { get; }
+        SFML.System.Vector2f BottomRight { get; }
     }
 }

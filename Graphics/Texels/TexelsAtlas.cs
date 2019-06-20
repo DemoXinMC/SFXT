@@ -25,9 +25,9 @@ namespace SFXT.Graphics
         public ushort Width { get; protected set; }
         public ushort Height { get; protected set; }
 
-        public Vector2i TopLeft { get => new SFML.System.Vector2i(this.OffsetX, this.OffsetY); }
-        public Vector2i TopRight { get => new SFML.System.Vector2i(this.OffsetX + this.Width, this.OffsetY); }
-        public Vector2i BottomLeft { get => new SFML.System.Vector2i(this.OffsetX, this.OffsetY + this.Height); }
-        public Vector2i BottomRight { get => new SFML.System.Vector2i(this.OffsetX + this.Width, this.OffsetY + this.Height); }
+        public Vector2f TopLeft { get => new SFML.System.Vector2f(this.OffsetX, this.OffsetY); }
+        public Vector2f TopRight { get => new SFML.System.Vector2f(this.OffsetX + this.Width, this.OffsetY); }
+        public Vector2f BottomLeft { get => new SFML.System.Vector2f(this.OffsetX, this.OffsetY + this.Height); }
+        public Vector2f BottomRight { get => new SFML.System.Vector2f(this.OffsetX + this.Width, this.OffsetY + this.Height); }
     }
 }

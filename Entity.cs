@@ -55,7 +55,7 @@ namespace SFXT
 
         public SFML.Graphics.Transform Transform { get; protected set; }
 
-        private float _rotation;
+        private float _rotation = 0;
         public float Rotation
         {
             get => this._rotation;
@@ -66,7 +66,7 @@ namespace SFXT
             }
         }
 
-        private float _scale;
+        private float _scale = 1f;
         public float Scale
         {
             get => this._scale;

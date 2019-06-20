@@ -9,7 +9,7 @@ namespace SFXT.Graphics
     /// <summary>
     /// SpriteBatch allows for efficient drawing of many Graphics, batching together any of them possible to reduce draw calls to the Graphics API.
     /// </summary>
-    public class SpriteBatch : Drawable
+    public class SpriteBatch
     {
         private List<SFXT.Graphics.Graphic> graphicList;
 
@@ -38,6 +38,7 @@ namespace SFXT.Graphics
             RenderStates currentState = states;
 
             VertexArray drawing = new VertexArray(PrimitiveType.Triangles, (uint)this.graphicList.Count * 6);
+            uint drawingIndex = 0;
 
             foreach(var graphic in graphicList)
             {
@@ -58,7 +59,7 @@ namespace SFXT.Graphics
                 if(batchableState == null)
                     batchableState = states;
 
-                if(batchableState.Value.Texture != currentState.Texture)
+                if(batchableState.Value.Texture != batchable.BatchTexture)
                     drawBatch = true;
 
                 if(batchableState.Value.BlendMode != currentState.BlendMode)
@@ -70,6 +71,8 @@ namespace SFXT.Graphics
                 if(drawBatch)
                 {
                     target.Draw(drawing, currentState);
+                    drawing.Clear();
+                    drawingIndex = 0;
                     RenderStates? newState = batchable.BatchRenderStates;
                     currentState = newState ?? states;
                     currentState.Texture = batchable.BatchTexture;
@@ -81,21 +84,18 @@ namespace SFXT.Graphics
                 {
                     target.Draw(drawing, currentState);
                     drawing.Clear();
+                    drawingIndex = 0;
                     drawing.PrimitiveType = batchVertexes.PrimitiveType;
                 }
 
                 for (uint i = 0; i < batchVertexes.VertexCount; i++)
-                    drawing.Append(batchVertexes[i]);
+                    drawing[drawingIndex++] = batchVertexes[i];
+
+                target.Draw(batchVertexes);
             }
 
             target.Draw(drawing, currentState);
             this.graphicList.Clear();
-        }
-
-        private void DrawVA(RenderTarget target, ref List<Vertex> vertexes, RenderStates renderState)
-        {
-            target.Draw(vertexes.ToArray(), PrimitiveType.Triangles, renderState);
-            vertexes.Clear();
         }
     }
 }

@@ -291,6 +291,13 @@ namespace SFXT
             foreach (var activity in renderList.Reverse())
                 activity.Render(this.Window, SFML.Graphics.RenderStates.Default);
 
+            /*
+            var drawable = new SFML.Graphics.CircleShape(30);
+            drawable.FillColor = SFML.Graphics.Color.Red;
+            drawable.Position = this.Window.GetView().Center;
+            this.Window.Draw(drawable);
+            */
+
             this.OnRenderEnd?.Invoke();
             this.Window.Display();
         }
