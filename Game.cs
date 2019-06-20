@@ -135,14 +135,19 @@ namespace SFXT
             updateClock.Restart();
             var updateTime = this.GameTime.ElapsedTime;
 
-            while(this.Window != null)
+            var tickTimer = (timeSecond / this.TPS);
+
+            Console.WriteLine("Desired Tick Rate: " + tickTimer.AsMilliseconds());
+
+            while (this.Window != null)
             {
                 while(updateClock.ElapsedTime > updateTime)
                 {
+                    Console.WriteLine("Elapsed Time: " + updateClock.ElapsedTime.AsMilliseconds());
                     this.updateTimes.Enqueue(updateClock.ElapsedTime);
                     this.Delta = updateClock.Restart().AsSeconds();
                     this.Update();
-                    updateTime += (timeSecond / this.TPS);
+                    updateTime += tickTimer;
                 }
 
                 renderClock.Restart();
@@ -281,8 +286,10 @@ namespace SFXT
                     break;
             }
 
-            foreach(var activity in renderList.Reverse())
-                activity.Render(this.Window, new SFML.Graphics.RenderStates());
+            this.Window.Clear(new SFML.Graphics.Color(100, 149, 237));
+
+            foreach (var activity in renderList.Reverse())
+                activity.Render(this.Window, SFML.Graphics.RenderStates.Default);
 
             this.OnRenderEnd?.Invoke();
             this.Window.Display();

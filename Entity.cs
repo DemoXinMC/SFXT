@@ -6,14 +6,16 @@ namespace SFXT
 {
     public class Entity
     {
-        public Entity()
+        protected Activity activity;
+        public Entity(Activity activity)
         {
+            this.activity = activity;
             this.components = new List<Component>();
             this.Transform = new SFML.Graphics.Transform();
             this.Position = new SFML.System.Vector2f();
         }
 
-        public Entity(int x, int y) : this()
+        public Entity(Activity activity, int x, int y) : this(activity)
         {
             this.Position = new SFML.System.Vector2f(x, y);
         }

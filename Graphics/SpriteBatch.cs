@@ -84,7 +84,7 @@ namespace SFXT.Graphics
                     drawing.PrimitiveType = batchVertexes.PrimitiveType;
                 }
 
-                for(uint i = 0; i < batchVertexes.VertexCount; i++)
+                for (uint i = 0; i < batchVertexes.VertexCount; i++)
                     drawing.Append(batchVertexes[i]);
             }
 
