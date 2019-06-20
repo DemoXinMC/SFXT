@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SFXT.Graphics
+﻿namespace SFXT.Graphics
 {
     abstract public class Graphic : Component
     {
@@ -25,7 +21,7 @@ namespace SFXT.Graphics
             }
         }
         private int layer = 0;
-        public abstract void Draw(SFML.Graphics.RenderTarget target);
+        public abstract void Draw(SFML.Graphics.RenderTarget target, SFML.Graphics.RenderStates renderStates);
 
         public Graphic(Entity entity) : base(entity)
         {

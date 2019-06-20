@@ -51,7 +51,7 @@ namespace SFXT.Graphics
                     target.Draw(drawing, currentState);
                     drawing.Clear();
                     drawingIndex = 0;
-                    graphic.Draw(target);
+                    graphic.Draw(target, states);
                     continue;
                 }
 

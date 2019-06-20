@@ -22,12 +22,12 @@ namespace SFXT.Components.Graphics
             this.renderStates = renderStates;
         }
 
-        public override void Draw(RenderTarget target)
+        public override void Draw(RenderTarget target, RenderStates renderStates)
         {
             if (this.renderStates != null)
                 target.Draw(this.drawable, this.renderStates.Value);
             else
-                target.Draw(this.drawable);
+                target.Draw(this.drawable, renderStates);
         }
     }
 }

@@ -22,10 +22,12 @@ namespace SFXT.Components.Graphics
             //this.Color = Color.Red;
         }
 
-        public override void Draw(RenderTarget target)
+        public override void Draw(RenderTarget target, RenderStates renderStates)
         {
             this.updateVAO();
-            target.Draw(this.vao, new RenderStates(this.texture.Texture));
+            var state = new RenderStates(renderStates);
+            state.Texture = this.texture.Texture;
+            target.Draw(this.vao, state);
         }
 
         protected void updateVAO()
