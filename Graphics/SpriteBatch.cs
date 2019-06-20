@@ -74,7 +74,7 @@ namespace SFXT.Graphics
                     drawing.Clear();
                     drawingIndex = 0;
                     RenderStates? newState = batchable.BatchRenderStates;
-                    currentState = newState ?? states;
+                    currentState = newState ?? currentState;
                     currentState.Texture = batchable.BatchTexture;
                 }
 
