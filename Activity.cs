@@ -24,6 +24,10 @@ namespace SFXT
 
         public Activity(Game game)
         {
+            this.entities = new Dictionary<uint, Entity>();
+            this.entitiesToAdd = new List<Entity>();
+            this.entitiesToRemove = new List<Entity>();
+
             this.Game = game;
             this.spriteBatch = new SpriteBatch();
         }
@@ -36,8 +40,11 @@ namespace SFXT
                 this.OnEntityAdded(entity);
             }
 
-            foreach(var item in this.entities.Where(kvp => this.entitiesToRemove.Contains(kvp.Value)).ToList())
+            foreach (var item in this.entities.Where(kvp => this.entitiesToRemove.Contains(kvp.Value)).ToList())
+            {
+                this.OnEntityRemoved(item.Value);
                 this.entities.Remove(item.Key);
+            }
 
             this.entitiesToAdd.Clear();
             this.entitiesToRemove.Clear();
@@ -45,13 +52,14 @@ namespace SFXT
             foreach(var entity in this.entities.Values)
                 entity.Update();
 
-            this.entities.OrderBy(kvp => kvp.Value.Layer);
+            
         }
 
         public virtual void Render()
         {
+            this.entities.OrderBy(kvp => kvp.Value.Layer);
 
-            foreach(var entity in this.entities.Values)
+            foreach (var entity in this.entities.Values)
                 foreach(var component in entity.GetComponents<Graphic>())
                     this.spriteBatch.Add(component);
         }

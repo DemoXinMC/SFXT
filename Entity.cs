@@ -8,6 +8,7 @@ namespace SFXT
     {
         public Entity()
         {
+            this.components = new List<Component>();
             this.Transform = new SFML.Graphics.Transform();
             this.Position = new SFML.System.Vector2f();
         }

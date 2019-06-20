@@ -37,17 +37,16 @@ namespace SFXT.Graphics
         {
             RenderStates currentState = states;
 
-            var vertexList = new List<SFML.Graphics.Vertex>(graphicList.Count * 6);
+            VertexArray drawing = new VertexArray(PrimitiveType.Triangles, (uint)this.graphicList.Count * 6);
 
-            var renderList = this.graphicList.OrderBy(o => o.Layer).ToList();
-
-            foreach(var graphic in renderList)
+            foreach(var graphic in graphicList)
             {
                 IBatchable batchable = graphic as IBatchable;
 
                 if(batchable == null)
                 {
-                    this.DrawVA(target, ref vertexList, currentState);
+                    target.Draw(drawing, currentState);
+                    drawing.Clear();
                     graphic.Draw(target);
                     continue;
                 }
@@ -70,17 +69,26 @@ namespace SFXT.Graphics
 
                 if(drawBatch)
                 {
-                    this.DrawVA(target, ref vertexList, currentState);
+                    target.Draw(drawing, currentState);
                     RenderStates? newState = batchable.BatchRenderStates;
                     currentState = newState ?? states;
                     currentState.Texture = batchable.BatchTexture;
                 }
 
-                var vertexArray = batchable.BatchVertexes;
-                for(uint i = 0; i < vertexArray.VertexCount; i++)
-                    vertexList.Add(vertexArray[i]);
+                var batchVertexes = batchable.BatchVertexes;
+
+                if (batchVertexes.PrimitiveType != drawing.PrimitiveType)
+                {
+                    target.Draw(drawing, currentState);
+                    drawing.Clear();
+                    drawing.PrimitiveType = batchVertexes.PrimitiveType;
+                }
+
+                for(uint i = 0; i < batchVertexes.VertexCount; i++)
+                    drawing.Append(batchVertexes[i]);
             }
 
+            target.Draw(drawing, currentState);
             this.graphicList.Clear();
         }
 

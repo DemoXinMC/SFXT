@@ -8,7 +8,6 @@ namespace SFXT
 {
     public class Game
     {
-        #region Public
         public string Title
         {
             get { return this.title; }
@@ -131,6 +130,7 @@ namespace SFXT
             var updateClock = new SFML.System.Clock();
             var renderClock = new SFML.System.Clock();
 
+            this.GameTime = new Clock();
             this.GameTime.Restart();
             updateClock.Restart();
             var updateTime = this.GameTime.ElapsedTime;
@@ -142,7 +142,7 @@ namespace SFXT
                     this.updateTimes.Enqueue(updateClock.ElapsedTime);
                     this.Delta = updateClock.Restart().AsSeconds();
                     this.Update();
-                    updateTime = updateTime + (timeSecond / this.TPS);
+                    updateTime += (timeSecond / this.TPS);
                 }
 
                 renderClock.Restart();
@@ -156,11 +156,13 @@ namespace SFXT
                     this.renderTimes.Dequeue();
             }
         }
-        #endregion
 
-        #region Constructors
         public Game()
         {
+            this.activities = new Stack<Activity>();
+            this.renderTimes = new Queue<Time>();
+            this.updateTimes = new Queue<Time>();
+
             this.Window = null;
             this.Dimensions = new Vector2i(360, 240);
             this.Title = "SFXT Game";
@@ -182,9 +184,7 @@ namespace SFXT
             this.TPS = targetTPS;
             this.FPS = targetFPS;
         }
-        #endregion
 
-        #region Private
         private Stack<Activity> activities;
 
         private void CreateWindow()
@@ -193,15 +193,17 @@ namespace SFXT
 
             var videoMode = new SFML.Window.VideoMode((uint)this.Dimensions.X, (uint)this.Dimensions.Y);
             this.Window = new SFML.Graphics.RenderWindow(videoMode, this.Title, this.Fullscreen ? SFML.Window.Styles.Fullscreen : SFML.Window.Styles.None);
-            this.Window.Position = this.Location == null ? this.Location : new Vector2i(0, 0);
+            this.Window.Position = this.Location == null ? this.Location : new Vector2i((int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Width / 2) - (videoMode.Width / 2)), (int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Height / 2) - (videoMode.Height / 2)));
 
-            this.WindowCreated(videoMode.Width, videoMode.Height);
+            this.WindowCreated?.Invoke(videoMode.Width, videoMode.Height);
+            this.Window.Display();
         }
 
         private void Update()
         {
+            /*
             if(this.activities.Count == 0)
-                throw new ApplicationException("SFXT Update requires an active Activity.");
+                throw new ApplicationException("SFXT Update requires an active Activity.");*/
 
             if(this.Window == null || !this.Window.IsOpen)
                 throw new ApplicationException("SFXT Update cannot begin without a valid Window.");
@@ -214,7 +216,7 @@ namespace SFXT
              * this.OnInputEnd();
              */
 
-            this.OnUpdateBegin();
+            this.OnUpdateBegin?.Invoke();
 
             var updateList = new Stack<Activity>();
 
@@ -228,7 +230,7 @@ namespace SFXT
             foreach(var activity in updateList.Reverse())
                 activity.Update();
 
-            this.OnUpdateEnd();
+            this.OnUpdateEnd?.Invoke();
         }
 
         private void Render()
@@ -236,7 +238,7 @@ namespace SFXT
             if(this.Window == null || !this.Window.IsOpen)
                 throw new ApplicationException("SFXT Render cannot begin without a valid Window.");
 
-            this.OnRenderBegin();
+            this.OnRenderBegin?.Invoke();
 
             var renderList = new Stack<Activity>();
 
@@ -250,11 +252,9 @@ namespace SFXT
             foreach(var activity in renderList.Reverse())
                 activity.Render();
 
-            this.OnRenderEnd();
+            this.OnRenderEnd?.Invoke();
         }
-        #endregion
 
-        #region Events
         public delegate void WindowCreatedHandler(uint width, uint height);
         public event WindowCreatedHandler WindowCreated;
 
@@ -265,6 +265,5 @@ namespace SFXT
         public delegate void RenderHandler();
         public event RenderHandler OnRenderBegin;
         public event RenderHandler OnRenderEnd;
-        #endregion
     }
 }
