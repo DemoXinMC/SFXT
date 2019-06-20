@@ -103,6 +103,7 @@ namespace SFXT
                 foreach (var component in entity.GetComponents<Graphic>())
                     graphicComponents.Add(component);
 
+            // Maybe switch this to a predicate to allow more use of the "Generic" Activity
             graphicComponents.OrderBy(item => item.Layer);
 
             foreach (var graphic in graphicComponents)
