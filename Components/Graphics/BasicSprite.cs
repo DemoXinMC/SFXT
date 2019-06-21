@@ -27,7 +27,6 @@ namespace SFXT.Components.Graphics
             this.updateVAO();
             var state = new RenderStates(renderStates);
             state.Texture = this.texture.Texture;
-            Debug.DrawCalls++;
             target.Draw(this.vao, state);
         }
 

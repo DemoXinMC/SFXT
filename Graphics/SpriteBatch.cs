@@ -39,7 +39,7 @@ namespace SFXT.Graphics
         {
             RenderStates currentState = new RenderStates(states);
 
-            VertexArray drawing = new VertexArray(PrimitiveType.Triangles, (uint)this.graphicList.Count * 6);
+            VertexArray drawing = new VertexArray(PrimitiveType.Triangles);
             uint drawingIndex = 0;
 
             foreach(var graphic in graphicList)
@@ -48,6 +48,7 @@ namespace SFXT.Graphics
 
                 if(batchable == null)
                 {
+                    Debug.DrawCalls++;
                     target.Draw(drawing, currentState);
                     drawing.Clear();
                     drawingIndex = 0;
@@ -61,7 +62,7 @@ namespace SFXT.Graphics
                 RenderStates? batchableState = batchable.BatchRenderStates;
 
                 if(batchableState == null)
-                    batchableState = states;
+                    batchableState = currentState;
 
                 if(batchable.BatchTexture != currentState.Texture)
                     drawBatch = true;
@@ -97,15 +98,11 @@ namespace SFXT.Graphics
                     Debug.DrawCalls++;
                     target.Draw(drawing, currentState);
                     drawing.Clear();
-                    drawingIndex = 0;
                     drawing.PrimitiveType = batchVertexes.PrimitiveType;
                 }
 
                 for (uint i = 0; i < batchVertexes.VertexCount; i++)
-                    drawing[drawingIndex++] = batchVertexes[i];
-
-                Debug.DrawCalls++;
-                target.Draw(batchVertexes, currentState);
+                    drawing.Append(batchVertexes[i]);
             }
 
             Debug.DrawCalls++;
