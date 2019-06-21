@@ -1,4 +1,5 @@
 ﻿using SFML.System;
+using SFXT.Util;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +41,7 @@ namespace SFXT
         private bool fullscreen;
 
         /// <summary>The Height/Width of the Game Window</summary>
-        public SFML.System.Vector2i Dimensions { get; private set; }
+        public Vector2 Dimensions { get; private set; }
         /// <summary>The X/Y position of the Game Window</summary>
         public SFML.System.Vector2i Location { get; private set; }
 

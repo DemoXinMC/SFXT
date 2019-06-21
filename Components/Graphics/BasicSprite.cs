@@ -61,13 +61,26 @@ namespace SFXT.Components.Graphics
                 bottomRight = temp;
             }
 
-            this.vao[0] = new Vertex(topLeft, this.texture.TopLeft);
-            this.vao[2] = new Vertex(topRight,this.texture.TopRight);
-            this.vao[1] = new Vertex(bottomRight, this.texture.BottomRight);
+            if (this.Color == null)
+            {
+                this.vao[0] = new Vertex(topLeft, this.texture.TopLeft);
+                this.vao[2] = new Vertex(topRight, this.texture.TopRight);
+                this.vao[1] = new Vertex(bottomRight, this.texture.BottomRight);
 
-            this.vao[3] = new Vertex(topLeft, this.texture.TopLeft);
-            this.vao[4] = new Vertex(bottomLeft, this.texture.BottomLeft);
-            this.vao[5] = new Vertex(bottomRight, this.texture.BottomRight);
+                this.vao[3] = new Vertex(topLeft, this.texture.TopLeft);
+                this.vao[4] = new Vertex(bottomLeft, this.texture.BottomLeft);
+                this.vao[5] = new Vertex(bottomRight, this.texture.BottomRight);
+            }
+            else
+            {
+                this.vao[0] = new Vertex(topLeft, this.Color, this.texture.TopLeft);
+                this.vao[2] = new Vertex(topRight, this.Color, this.texture.TopRight);
+                this.vao[1] = new Vertex(bottomRight, this.Color, this.texture.BottomRight);
+
+                this.vao[3] = new Vertex(topLeft, this.Color, this.texture.TopLeft);
+                this.vao[4] = new Vertex(bottomLeft, this.Color, this.texture.BottomLeft);
+                this.vao[5] = new Vertex(bottomRight, this.Color, this.texture.BottomRight);
+            }
         }
 
         public RenderStates? BatchRenderStates { get => null; }

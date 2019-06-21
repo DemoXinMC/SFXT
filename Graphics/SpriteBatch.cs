@@ -102,11 +102,11 @@ namespace SFXT.Graphics
                     drawing[drawingIndex++] = batchVertexes[i];
 
                 target.Draw(batchVertexes, currentState);
-                //graphic.Draw(target);
             }
 
             target.Draw(drawing, currentState);
-            this.graphicList.Clear();
+            if(clearGraphicList)
+                this.graphicList.Clear();
         }
     }
 }

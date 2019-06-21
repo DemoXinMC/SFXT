@@ -29,7 +29,7 @@ namespace SFXT.Graphics
             this.activity = activity;
 
             cameras = new Dictionary<string, Camera>();
-            cameras.Add("Default", new Camera(this.activity.Game.Window.Size.X, this.activity.Game.Window.Size.Y));
+            cameras.Add("Default", new Camera((uint)this.activity.Game.Dimensions.X, (uint)this.activity.Game.Dimensions.Y));
 
             chaseCams = new Dictionary<Camera, Entity>();
             shakyCams = new Dictionary<Camera, CameraShake>();
@@ -65,6 +65,8 @@ namespace SFXT.Graphics
         public void StartChaseCam(Camera camera, Entity target)
         {
             if (camera == null || target == null)
+                return;
+            if (this.chaseCams.ContainsKey(camera))
                 return;
             this.chaseCams.Add(camera, target);
         }
