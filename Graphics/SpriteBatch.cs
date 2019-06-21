@@ -51,6 +51,7 @@ namespace SFXT.Graphics
                     target.Draw(drawing, currentState);
                     drawing.Clear();
                     drawingIndex = 0;
+                    Debug.DrawCalls++;
                     graphic.Draw(target, states);
                     continue;
                 }
@@ -73,6 +74,7 @@ namespace SFXT.Graphics
 
                 if(drawBatch)
                 {
+                    Debug.DrawCalls++;
                     target.Draw(drawing, currentState);
                     drawing.Clear();
                     drawingIndex = 0;
@@ -92,6 +94,7 @@ namespace SFXT.Graphics
 
                 if (batchVertexes.PrimitiveType != drawing.PrimitiveType)
                 {
+                    Debug.DrawCalls++;
                     target.Draw(drawing, currentState);
                     drawing.Clear();
                     drawingIndex = 0;
@@ -101,9 +104,11 @@ namespace SFXT.Graphics
                 for (uint i = 0; i < batchVertexes.VertexCount; i++)
                     drawing[drawingIndex++] = batchVertexes[i];
 
+                Debug.DrawCalls++;
                 target.Draw(batchVertexes, currentState);
             }
 
+            Debug.DrawCalls++;
             target.Draw(drawing, currentState);
             if(clearGraphicList)
                 this.graphicList.Clear();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFXT.Util;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,21 +13,16 @@ namespace SFXT
             this.activity = activity;
             this.components = new List<Component>();
             this.Transform = new SFML.Graphics.Transform();
-            this.Position = new SFML.System.Vector2f();
+            this.Position = new Vector2(0, 0);
         }
 
-        public Entity(Activity activity, int x, int y) : this(activity)
-        {
-            this.Position = new SFML.System.Vector2f(x, y);
-        }
-
-        public float X
+        public double X
         {
             get => this.Position.X;
             set => this.Position.X = value;
         }
 
-        public float Y
+        public double Y
         {
             get => this.Position.Y;
             set => this.Position.Y = value;
@@ -35,7 +31,7 @@ namespace SFXT
         public float SizeX { get => this.Size.X; }
         public float SizeY { get => this.Size.Y; }
 
-        public SFML.System.Vector2f Position;
+        public Vector2 Position;
         public SFML.System.Vector2f Size
         {
             get

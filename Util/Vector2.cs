@@ -7,8 +7,8 @@ namespace SFXT.Util
 {
     public class Vector2
     {
-        public double X { get; protected set; }
-        public double Y { get; protected set; }
+        public double X { get; set; }
+        public double Y { get; set; }
 
         public Vector2(double x, double Y)
         {
@@ -73,6 +73,14 @@ namespace SFXT.Util
             return new Vector2(rotatedX, rotatedY);
         }
 
-        public static Vector2 operator* (Vector2 vector, double amount) => new Vector2(vector.X * amount, vector.Y * amount);
+        public static Vector2 operator + (Vector2 vector, double amount) => new Vector2(vector.X + amount, vector.Y + amount);
+        public static Vector2 operator - (Vector2 vector, double amount) => new Vector2(vector.X - amount, vector.Y - amount);
+        public static Vector2 operator * (Vector2 vector, double amount) => new Vector2(vector.X * amount, vector.Y * amount);
+        public static Vector2 operator / (Vector2 vector, double amount) => new Vector2(vector.X / amount, vector.Y / amount);
+
+        public static Vector2 operator + (Vector2 vector, Vector2 other) => new Vector2(vector.X + other.X, vector.Y + other.Y);
+        public static Vector2 operator - (Vector2 vector, Vector2 other) => new Vector2(vector.X - other.X, vector.Y - other.Y);
+        public static Vector2 operator * (Vector2 vector, Vector2 other) => new Vector2(vector.X * other.X, vector.Y * other.Y);
+        public static Vector2 operator / (Vector2 vector, Vector2 other) => new Vector2(vector.X / other.X, vector.Y / other.Y);
     }
 }

@@ -139,8 +139,6 @@ namespace SFXT
 
             var tickTimer = (timeSecond / this.TPS);
 
-            Console.WriteLine("Desired Tick Rate: " + tickTimer.AsMilliseconds());
-
             while (this.Window != null)
             {
                 while(this.GameTime.ElapsedTime > updateTime)
@@ -154,6 +152,7 @@ namespace SFXT
 
                 renderClock.Restart();
                 this.Interpolation = updateClock.ElapsedTime.AsSeconds();
+                Debug.FrameCount++;
                 this.Render();
                 this.renderTimes.Enqueue(renderClock.Restart());
 

@@ -24,6 +24,7 @@ namespace SFXT.Components.Graphics
 
         public override void Draw(RenderTarget target, RenderStates renderStates)
         {
+            Debug.DrawCalls++;
             if (this.renderStates != null)
                 target.Draw(this.drawable, this.renderStates.Value);
             else

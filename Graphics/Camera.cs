@@ -1,6 +1,8 @@
-﻿using SFXT.Util;
+﻿using SFML.System;
+using SFXT.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SFXT.Graphics
@@ -54,8 +56,15 @@ namespace SFXT.Graphics
             }
         }
 
-        public Camera GetCamera(string name)
+        public Camera GetCamera(string name = "")
         {
+            if(name == "")
+            {
+                if (this.cameras.Count > 0)
+                    return this.cameras.First().Value;
+                return null;
+            }
+
             var exists = cameras.TryGetValue(name, out Camera ret);
 
             if (exists) return ret;
@@ -86,7 +95,7 @@ namespace SFXT.Graphics
             public Camera(uint width, uint height)
             {
                 this.View = new SFML.Graphics.View(new SFML.System.Vector2f(0, 0), new SFML.System.Vector2f(width, height));
-                this.RenderStates = new SFML.Graphics.RenderStates();
+                this.RenderStates = new SFML.Graphics.RenderStates(SFML.Graphics.RenderStates.Default);
                 this.RenderTexture = new SFML.Graphics.RenderTexture(width, height);
                 this.RenderTexture.SetView(this.View);
             }
@@ -101,14 +110,14 @@ namespace SFXT.Graphics
                 this.View.Center = entity.Position;
             }
 
-            public void Move(float x, float y)
+            public void Move(double x, double y)
             {
-                this.View.Center = this.View.Center + new Vector2(x, y);
+                this.Move(new Vector2(x, y));
             }
 
             public void Move(Vector2 vector)
             {
-                this.View.Center = this.View.Center + vector;
+                this.View.Center = this.View.Center + (Vector2f)vector;
             }
         }
 

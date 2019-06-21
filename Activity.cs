@@ -103,8 +103,9 @@ namespace SFXT
         {
             List<Graphic> graphicComponents = new List<Graphic>(this.entities.Count);
             foreach (var entity in this.entities.Values)
-                foreach (var component in entity.GetComponents<Graphic>())
-                    graphicComponents.Add(component);
+                if(entity.GetComponents<Graphic>() != null)
+                    foreach (var component in entity.GetComponents<Graphic>())
+                        graphicComponents.Add(component);
 
             this.CameraManager.Update();
 
@@ -120,13 +121,15 @@ namespace SFXT
                 this.spriteBatch.Add(graphic);
             }
 
-            var previousView = this.Game.Window.GetView();
+            //spriteBatch.Draw(target, states, false);
+
+            var previousView = target.GetView();
             foreach (var view in this.CameraManager.Views)
             {
-                this.Game.Window.SetView(view.View);
-                spriteBatch.Draw(this.Game.Window, view.RenderStates);
+                target.SetView(view.View);
+                spriteBatch.Draw(target, view.RenderStates);
             }
-            this.Game.Window.SetView(previousView);
+            target.SetView(previousView);
 
             spriteBatch.Clear();
         }

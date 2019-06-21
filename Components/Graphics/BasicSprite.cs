@@ -13,13 +13,13 @@ namespace SFXT.Components.Graphics
         protected ITexels texture;
         protected VertexArray vao;
 
-        public Color Color { get; set; }
+        public Color? Color { get; set; }
 
         public BasicSprite(Entity entity, ITexels texture) : base(entity)
         {
             this.texture = texture;
             this.vao = new VertexArray(PrimitiveType.Triangles, 6);
-            //this.Color = Color.Red;
+            this.Color = null;
         }
 
         public override void Draw(RenderTarget target, RenderStates renderStates)
@@ -27,6 +27,7 @@ namespace SFXT.Components.Graphics
             this.updateVAO();
             var state = new RenderStates(renderStates);
             state.Texture = this.texture.Texture;
+            Debug.DrawCalls++;
             target.Draw(this.vao, state);
         }
 
@@ -73,13 +74,13 @@ namespace SFXT.Components.Graphics
             }
             else
             {
-                this.vao[0] = new Vertex(topLeft, this.Color, this.texture.TopLeft);
-                this.vao[2] = new Vertex(topRight, this.Color, this.texture.TopRight);
-                this.vao[1] = new Vertex(bottomRight, this.Color, this.texture.BottomRight);
+                this.vao[0] = new Vertex(topLeft, this.Color.Value, this.texture.TopLeft);
+                this.vao[2] = new Vertex(topRight, this.Color.Value, this.texture.TopRight);
+                this.vao[1] = new Vertex(bottomRight, this.Color.Value, this.texture.BottomRight);
 
-                this.vao[3] = new Vertex(topLeft, this.Color, this.texture.TopLeft);
-                this.vao[4] = new Vertex(bottomLeft, this.Color, this.texture.BottomLeft);
-                this.vao[5] = new Vertex(bottomRight, this.Color, this.texture.BottomRight);
+                this.vao[3] = new Vertex(topLeft, this.Color.Value, this.texture.TopLeft);
+                this.vao[4] = new Vertex(bottomLeft, this.Color.Value, this.texture.BottomLeft);
+                this.vao[5] = new Vertex(bottomRight, this.Color.Value, this.texture.BottomRight);
             }
         }
 
