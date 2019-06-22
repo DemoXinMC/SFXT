@@ -110,9 +110,10 @@ namespace SFXT
             this.CameraManager.Update();
 
             // Maybe switch this to a predicate to allow more use of the "Generic" Activity
-            graphicComponents.OrderBy(item => item.Layer);
+            var ordered = graphicComponents.OrderBy(item => item.Layer).ThenBy(item => item.Entity.Y);
+            
 
-            foreach (var graphic in graphicComponents)
+            foreach (var graphic in ordered)
             {
                 if(graphic.RequirePerCameraBatching)
                 {

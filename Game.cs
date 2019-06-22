@@ -104,6 +104,9 @@ namespace SFXT
                 foreach(var time in updateTimes)
                     totalTime += time;
 
+                if (updateTimes.Count == 0)
+                    return Time.Zero;
+
                 return totalTime / updateTimes.Count;
             }
         }
@@ -114,6 +117,9 @@ namespace SFXT
                 var totalTime = new SFML.System.Time();
                 foreach(var time in renderTimes)
                     totalTime += time;
+
+                if (renderTimes.Count == 0)
+                    return Time.Zero;
 
                 return totalTime / updateTimes.Count;
             }
@@ -142,23 +148,24 @@ namespace SFXT
             while (this.Window != null)
             {
                 while(this.GameTime.ElapsedTime > updateTime)
-                {
-                    this.updateTimes.Enqueue(updateClock.ElapsedTime);
+                {  
                     this.Delta = updateClock.ElapsedTime.AsSeconds();
                     updateClock.Restart();
                     this.Update();
+                    this.updateTimes.Enqueue(updateClock.ElapsedTime);
                     updateTime += tickTimer;
                 }
 
-                renderClock.Restart();
+                
                 this.Interpolation = updateClock.ElapsedTime.AsSeconds();
+                renderClock.Restart();
                 Debug.FrameCount++;
                 this.Render();
                 this.renderTimes.Enqueue(renderClock.Restart());
 
                 while(this.updateTimes.Count > this.TPS * 10)
                     this.updateTimes.Dequeue();
-                while(this.renderTimes.Count > this.FPS * 10)
+                while(this.renderTimes.Count > this.FPS + 1 * 10)
                     this.renderTimes.Dequeue();
             }
         }
@@ -294,13 +301,6 @@ namespace SFXT
 
             foreach (var activity in renderList.Reverse())
                 activity.Render(this.Window, SFML.Graphics.RenderStates.Default);
-
-            /*
-            var drawable = new SFML.Graphics.CircleShape(30);
-            drawable.FillColor = SFML.Graphics.Color.Red;
-            drawable.Position = this.Window.GetView().Center;
-            this.Window.Draw(drawable);
-            */
 
             this.OnRenderEnd?.Invoke();
             this.Window.Display();

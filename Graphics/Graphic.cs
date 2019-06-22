@@ -11,8 +11,8 @@
         {
             get
             {
-                if(this.Relative && this.entity != null)
-                    return this.entity.Layer + this.layer;
+                if(this.Relative && this.Entity != null)
+                    return this.Entity.Layer + this.layer;
                 return this.layer;
             }
             set

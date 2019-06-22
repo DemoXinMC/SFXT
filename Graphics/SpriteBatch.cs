@@ -80,14 +80,11 @@ namespace SFXT.Graphics
                     if(currentState.Texture != null)
                         Console.WriteLine(batchable.BatchTexture.CPointer + " | " + currentState.Texture.CPointer);
 
-                    RenderStates newState;
                     if (batchable.BatchRenderStates != null)
-                        newState = new RenderStates(batchable.BatchRenderStates.Value);
-                    else
-                        newState = new RenderStates(states);
-
-                    currentState.BlendMode = newState.BlendMode;
-                    currentState.Shader = newState.Shader;
+                    {
+                        currentState.BlendMode = batchableState.Value.BlendMode;
+                        currentState.Shader = batchableState.Value.Shader;
+                    }
                     currentState.Texture = batchable.BatchTexture;
                 }
 

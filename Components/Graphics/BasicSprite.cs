@@ -32,14 +32,14 @@ namespace SFXT.Components.Graphics
 
         protected void updateVAO()
         {
-            var pos = this.entity.Position + this.OriginOffset;
-            var width = this.texture.Width * this.entity.Scale;
-            var height = this.texture.Height * this.entity.Scale;
+            var pos = this.Entity.Position + this.OriginOffset;
+            var width = this.texture.Width * this.Entity.Scale;
+            var height = this.texture.Height * this.Entity.Scale;
 
-            var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.entity.Rotation);
-            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.entity.Rotation);
-            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.entity.Rotation);
-            var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.entity.Rotation);
+            var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
+            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
+            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.Entity.Rotation);
+            var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.Entity.Rotation);
 
             if(this.FlipHorizontal)
             {
