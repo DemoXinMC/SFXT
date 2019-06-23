@@ -8,6 +8,8 @@ namespace SFXT
     public class Entity
     {
         protected Activity activity;
+
+        public bool Dirty { get; protected set; }
         public Entity(Activity activity)
         {
             this.activity = activity;
@@ -19,13 +21,21 @@ namespace SFXT
         public double X
         {
             get => this.Position.X;
-            set => this.Position.X = value;
+            set
+            {
+                this.Position.X = value;
+                this.Dirty = true;
+            }
         }
 
         public double Y
         {
             get => this.Position.Y;
-            set => this.Position.Y = value;
+            set
+            {
+                this.Position.Y = value;
+                this.Dirty = true;
+            }
         }
 
         public float SizeX { get => this.Size.X; }
@@ -45,6 +55,7 @@ namespace SFXT
         {
             get
             {
+                // Calculate this
                 return new SFML.Graphics.IntRect(0, 0, 0, 0);
             }
         }
@@ -59,6 +70,7 @@ namespace SFXT
             {
                 this._rotation = value;
                 this.Transform.Rotate(value);
+                this.Dirty = true;
             }
         }
 
@@ -69,6 +81,7 @@ namespace SFXT
             set {
                 this._scale = value;
                 this.Transform.Scale(new SFML.System.Vector2f(value, value));
+                this.Dirty = true;
             }
         }
 
@@ -78,11 +91,13 @@ namespace SFXT
         public void AddComponent(Component component)
         {
             this.components.Add(component);
+            this.Dirty = true;
         }
 
         public void RemoveComponent(Component component)
         {
             this.components.Remove(component);
+            this.Dirty = true;
         }
 
         public T GetComponent<T>() where T : Component

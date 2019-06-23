@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SFXT.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,8 @@ namespace SFXT.Graphics
 
             VertexArray drawing = new VertexArray(PrimitiveType.Triangles);
 
+            var screenSpace = target.GetView().GetBroadBounds();
+
             foreach(var graphic in graphicList)
             {
                 IBatchable batchable = graphic as IBatchable;
@@ -54,6 +57,21 @@ namespace SFXT.Graphics
                     graphic.Draw(target, states);
                     continue;
                 }
+
+                /*
+                bool shouldDraw = false;
+
+                foreach (var vertex in batchable.BatchVertexes.ToArray())
+                {
+                    if (screenSpace.Contains(vertex.Position.X, vertex.Position.Y))
+                    {
+                        shouldDraw = true;
+                        break;
+                    }
+                }
+
+                if (!shouldDraw && !screenSpace.Intersects(batchable.BatchVertexes.Bounds))
+                    continue;*/
 
                 var drawBatch = false;
 
