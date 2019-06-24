@@ -42,8 +42,6 @@ namespace SFXT.Graphics
 
             VertexArray drawing = new VertexArray(PrimitiveType.Triangles);
 
-            //var screenSpace = target.GetView().GetBroadBounds();
-
             foreach(var graphic in graphicList)
             {
                 IBatchable batchable = graphic as IBatchable;

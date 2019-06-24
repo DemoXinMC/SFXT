@@ -9,14 +9,12 @@ namespace SFXT
     {
         protected Activity activity;
 
-        public bool Dirty { get; protected set; }
         public Entity(Activity activity)
         {
             this.activity = activity;
             this.components = new List<Component>();
             this.Transform = new SFML.Graphics.Transform();
             this.Position = new Vector2(0, 0);
-            this.Dirty = true;
         }
 
         public double X
@@ -25,7 +23,6 @@ namespace SFXT
             set
             {
                 this.Position.X = value;
-                this.Dirty = true;
             }
         }
 
@@ -35,7 +32,6 @@ namespace SFXT
             set
             {
                 this.Position.Y = value;
-                this.Dirty = true;
             }
         }
 
@@ -71,7 +67,6 @@ namespace SFXT
             {
                 this._rotation = value;
                 this.Transform.Rotate(value);
-                this.Dirty = true;
             }
         }
 
@@ -82,7 +77,6 @@ namespace SFXT
             set {
                 this._scale = value;
                 this.Transform.Scale(new SFML.System.Vector2f(value, value));
-                this.Dirty = true;
             }
         }
 
@@ -92,13 +86,11 @@ namespace SFXT
         public void AddComponent(Component component)
         {
             this.components.Add(component);
-            this.Dirty = true;
         }
 
         public void RemoveComponent(Component component)
         {
             this.components.Remove(component);
-            this.Dirty = true;
         }
 
         public T GetComponent<T>() where T : Component
@@ -122,6 +114,6 @@ namespace SFXT
             return null;
         }
 
-        public virtual void Update() { this.Dirty = false; }
+        public virtual void Update() { }
     }
 }

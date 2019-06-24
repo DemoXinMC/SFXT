@@ -11,8 +11,7 @@ namespace SFXT.Components.Graphics
     {
         private ITexels texture;
         private VertexBuffer vbo;
-        private uint width;
-        private uint height;
+
         private uint tileWidth;
         private uint tileHeight;
 
@@ -50,18 +49,18 @@ namespace SFXT.Components.Graphics
 
             VertexArray vao = new VertexArray();
 
-            var totalWidth = tileData.GetLength(0) * tileWidth;
-            var totalHeight = tileData.GetLength(1) * tileHeight;
+            var totalWidth = tileData.Length * tileWidth;
+            var totalHeight = tileData[0].Length * tileHeight;
             var drawingRoot = (this.Entity.Position + this.OriginOffset) - new Vector2(totalWidth / 2, totalHeight / 2);
 
-            for(uint i = 0; i < tileData.GetLength(0); i++)
+            for(uint i = 0; i < tileData.Length; i++)
             {
-                for(uint j = 0; i < tileData[i].GetLength(1); j++)
+                for(uint j = 0; j < tileData[i].Length; j++)
                 {
                     textureRow = tileData[i][j] / textureTilesX;
                     textureColumn = tileData[i][j] % textureTilesX;
 
-                    var pos = new Vector2(i * tileWidth, j * tileHeight);
+                    var pos = new Vector2(i * tileWidth, j * tileHeight) + drawingRoot;
 
                     var topLeft = new Vector2(pos.X, pos.Y);
                     var topRight = topLeft + new Vector2(tileWidth, 0);
