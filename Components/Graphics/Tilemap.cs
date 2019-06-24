@@ -39,6 +39,19 @@ namespace SFXT.Components.Graphics
             this.rebuildVBO();
         }
 
+        public void SetTileData(uint x, uint y, uint tileId)
+        {
+            if (x >= this.tileData.Length || y >= this.tileData[0].Length)
+                return;
+            this.tileData[x][y] = tileId;
+            this.rebuildVBO();
+        }
+
+        public void Redraw()
+        {
+            this.rebuildVBO();
+        }
+
         private void rebuildVBO()
         {
             uint textureTilesX = texture.Width / tileWidth;
@@ -51,7 +64,8 @@ namespace SFXT.Components.Graphics
 
             var totalWidth = tileData.Length * tileWidth;
             var totalHeight = tileData[0].Length * tileHeight;
-            var drawingRoot = (this.Entity.Position + this.OriginOffset) - new Vector2(totalWidth / 2, totalHeight / 2);
+            var center = this.Entity.Position + this.OriginOffset;
+            var drawingRoot =  center - (new Vector2(totalWidth / 2, totalHeight / 2) * this.Entity.Scale);
 
             for(uint i = 0; i < tileData.Length; i++)
             {
@@ -60,12 +74,17 @@ namespace SFXT.Components.Graphics
                     textureRow = tileData[i][j] / textureTilesX;
                     textureColumn = tileData[i][j] % textureTilesX;
 
-                    var pos = new Vector2(i * tileWidth, j * tileHeight) + drawingRoot;
+                    var pos = new Vector2(i * tileWidth * this.Entity.Scale, j * tileHeight * this.Entity.Scale) + drawingRoot;
 
                     var topLeft = new Vector2(pos.X, pos.Y);
-                    var topRight = topLeft + new Vector2(tileWidth, 0);
-                    var bottomLeft = topLeft + new Vector2(0, tileHeight);
-                    var bottomRight = topLeft + new Vector2(tileWidth, tileHeight);
+                    var topRight = topLeft + new Vector2(tileWidth * this.Entity.Scale, 0);
+                    var bottomLeft = topLeft + new Vector2(0, tileHeight * this.Entity.Scale);
+                    var bottomRight = topLeft + new Vector2(tileWidth * this.Entity.Scale, tileHeight * this.Entity.Scale);
+
+                    topLeft = topLeft.RotateAround(center, this.Entity.Rotation);
+                    topRight = topRight.RotateAround(center, this.Entity.Rotation);
+                    bottomLeft = bottomLeft.RotateAround(center, this.Entity.Rotation);
+                    bottomRight = bottomRight.RotateAround(center, this.Entity.Rotation);
 
                     var textureTopLeft = new Vector2(textureRow * tileHeight, textureColumn * tileWidth);
                     var textureTopRight = textureTopLeft + new Vector2(tileWidth, 0);

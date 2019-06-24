@@ -1,4 +1,5 @@
-﻿using SFML.System;
+﻿using SFML.Graphics;
+using SFML.System;
 using SFXT.Util;
 using System;
 using System.Collections.Generic;
@@ -90,14 +91,14 @@ namespace SFXT.Graphics
         {
             public SFML.Graphics.View View { get; private set; }
             public SFML.Graphics.RenderStates RenderStates { get; private set; }
-            public SFML.Graphics.RenderTexture RenderTexture { get; private set; }
+
+            public Vector2 Size { get; private set; }
 
             public Camera(uint width, uint height)
             {
                 this.View = new SFML.Graphics.View(new SFML.System.Vector2f(0, 0), new SFML.System.Vector2f(width, height));
                 this.RenderStates = new SFML.Graphics.RenderStates(SFML.Graphics.RenderStates.Default);
-                this.RenderTexture = new SFML.Graphics.RenderTexture(width, height);
-                this.RenderTexture.SetView(this.View);
+                this.Size = new Vector2(width, height);
             }
 
             public void MoveTo(float x, float y)
@@ -118,6 +119,20 @@ namespace SFXT.Graphics
             public void Move(Vector2 vector)
             {
                 this.View.Center = this.View.Center + (Vector2f)vector;
+            }
+
+            private double cameraHeight;
+            public double CameraHeight
+            {
+                get => cameraHeight;
+                set
+                {
+                    this.cameraHeight = value;
+                    var center = this.View.Center;
+                    this.View.Reset(new FloatRect(new Vector2(0, 0), this.Size));
+                    this.View.Center = center;
+                    this.View.Zoom((float)value);
+                }
             }
         }
 
