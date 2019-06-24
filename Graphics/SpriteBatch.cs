@@ -58,21 +58,6 @@ namespace SFXT.Graphics
                     continue;
                 }
 
-                /*
-                bool shouldDraw = false;
-
-                foreach (var vertex in batchable.BatchVertexes.ToArray())
-                {
-                    if (screenSpace.Contains(vertex.Position.X, vertex.Position.Y))
-                    {
-                        shouldDraw = true;
-                        break;
-                    }
-                }
-
-                if (!shouldDraw && !screenSpace.Intersects(batchable.BatchVertexes.Bounds))
-                    continue;*/
-
                 var drawBatch = false;
 
                 RenderStates? batchableState = batchable.BatchRenderStates;
