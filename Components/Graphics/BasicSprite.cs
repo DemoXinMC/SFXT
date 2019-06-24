@@ -32,9 +32,6 @@ namespace SFXT.Components.Graphics
 
         protected void updateVAO()
         {
-            if (!this.Entity.Dirty)
-                return;
-
             var pos = this.Entity.Position + this.OriginOffset;
             var width = this.texture.Width * this.Entity.Scale;
             var height = this.texture.Height * this.Entity.Scale;
