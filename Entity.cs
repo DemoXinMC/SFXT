@@ -16,6 +16,7 @@ namespace SFXT
             this.components = new List<Component>();
             this.Transform = new SFML.Graphics.Transform();
             this.Position = new Vector2(0, 0);
+            this.Dirty = true;
         }
 
         public double X
@@ -121,6 +122,6 @@ namespace SFXT
             return null;
         }
 
-        public virtual void Update() { }
+        public virtual void Update() { this.Dirty = false; }
     }
 }
