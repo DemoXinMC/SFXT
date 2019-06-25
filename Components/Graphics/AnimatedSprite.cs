@@ -1,10 +1,12 @@
 ﻿using SFML.Graphics;
+using SFML.System;
 using SFXT.Graphics;
 using SFXT.Graphics.Texels;
 using SFXT.Util;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 
 namespace SFXT.Components.Graphics
@@ -168,14 +170,14 @@ namespace SFXT.Components.Graphics
 
         public class Animation
         {
-            private List<KeyValuePair<uint, SFML.System.Time>> frames = new List<KeyValuePair<uint, SFML.System.Time>>();
+            protected List<KeyValuePair<uint, SFML.System.Time>> frames = new List<KeyValuePair<uint, SFML.System.Time>>();
 
             public void AddFrame(uint frameId, SFML.System.Time duration)
             {
                 this.frames.Add(new KeyValuePair<uint, SFML.System.Time>(frameId, duration));
             }
 
-            public uint GetFrame(SFML.System.Time time)
+            public virtual uint GetFrame(Time time)
             {
                 var passedTime = time;
 
@@ -184,6 +186,26 @@ namespace SFXT.Components.Graphics
                     passedTime -= frame.Value;
                     if (passedTime < SFML.System.Time.Zero)
                         return frame.Key;
+                }
+
+                return this.frames.Last().Key;
+            }
+        }
+
+        public class LoopingAnimation : Animation
+        {
+            public override uint GetFrame(Time time)
+            {
+                var passedTime = time;
+
+                while (passedTime > Time.Zero)
+                {
+                    foreach (var frame in this.frames)
+                    {
+                        passedTime -= frame.Value;
+                        if (passedTime < Time.Zero)
+                            return frame.Key;
+                    }
                 }
 
                 return 0;
