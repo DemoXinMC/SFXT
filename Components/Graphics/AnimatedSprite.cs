@@ -16,13 +16,19 @@ namespace SFXT.Components.Graphics
 
         protected FrameHelper frameHelper;
 
+        private Dictionary<string, Animation> animations;
+        public Animation CurrentAnimation { get; protected set; }
+        private SFML.System.Clock animationClock;
+
         public SFML.Graphics.Color? Color { get; set; }
 
         public AnimatedSprite(Entity entity) : base(entity)
         {
             this.texture = null;
-            this.vao = null;
+            this.vao = new VertexArray(PrimitiveType.Triangles, 6);
             this.Color = null;
+            this.frameHelper = null;
+            this.animationClock = new SFML.System.Clock();
         }
 
         public AnimatedSprite(Entity entity, ITexels texture, uint frameWidth, uint frameHeight) : base(entity)
@@ -45,8 +51,23 @@ namespace SFXT.Components.Graphics
 
         public uint GetCurrentFrame()
         {
-            // TODO: implement
+            if (this.CurrentAnimation != null)
+                return this.CurrentAnimation.GetFrame(this.animationClock.ElapsedTime);
             return 0;
+        }
+
+        public void AddAnimation(string name, Animation animation)
+        {
+            if (!this.animations.ContainsKey(name) && animation != null)
+                this.animations.Add(name, animation);
+        }
+
+        public void GetAnimation(string name)
+        {
+            var success = this.animations.TryGetValue(name, out Animation ret);
+
+            if (success) return ret;
+            return null;
         }
 
         public override void Draw(RenderTarget target, RenderStates renderStates)
@@ -88,7 +109,7 @@ namespace SFXT.Components.Graphics
                 bottomRight = temp;
             }
 
-            var frameTexel = this.frameHelper.GetFrameTexel(this.texture, this.GetCurrentFrame());
+            var frameTexel = this.frameHelper.GetFrameTexel(this.texture, this.CurrentAnimation.GetFrame(this.animationClock.ElapsedTime));
 
             if (this.Color == null)
             {
@@ -120,6 +141,14 @@ namespace SFXT.Components.Graphics
             {
                 this.updateVAO();
                 return this.vao;
+            }
+        }
+
+        public class Animation
+        {
+            public uint GetFrame(SFML.System.Time time)
+            {
+                return 0;
             }
         }
     }
