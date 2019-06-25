@@ -20,7 +20,8 @@ namespace SFXT.Components.Graphics
 
         private Dictionary<string, Animation> animations;
         public Animation CurrentAnimation { get; protected set; }
-        private SFML.System.Clock animationClock;
+        private Clock animationClock;
+        private float playSpeed;
 
         public SFML.Graphics.Color? Color { get; set; }
 
@@ -72,19 +73,21 @@ namespace SFXT.Components.Graphics
             return null;
         }
 
-        public void Play(Animation animation)
+        public void Play(Animation animation, float playSpeed = 1f)
         {
             this.CurrentAnimation = animation;
+            this.playSpeed = playSpeed;
             this.animationClock.Restart();
         }
 
-        public void Play(string animationName)
+        public void Play(string animationName, float playSpeed = 1f)
         {
             var success = this.animations.TryGetValue(animationName, out var animation);
 
             if (success)
             {
                 this.CurrentAnimation = animation;
+                this.playSpeed = 1f;
                 this.animationClock.Restart();
             }
         }
@@ -133,7 +136,7 @@ namespace SFXT.Components.Graphics
                 bottomRight = temp;
             }
 
-            var frameTexel = this.frameHelper.GetFrameTexel(this.texture, this.CurrentAnimation.GetFrame(this.animationClock.ElapsedTime));
+            var frameTexel = this.frameHelper.GetFrameTexel(this.texture, this.CurrentAnimation.GetFrame(this.animationClock.ElapsedTime * this.playSpeed));
 
             if (this.Color == null)
             {
