@@ -1,5 +1,6 @@
 ﻿using SFML.Graphics;
 using SFXT.Graphics;
+using SFXT.Graphics.Texels;
 using SFXT.Util;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace SFXT.Components.Graphics
 
         private uint tileWidth;
         private uint tileHeight;
+        private FrameHelper frameHelper;
 
         private uint[][] tileData;
 
@@ -22,14 +24,21 @@ namespace SFXT.Components.Graphics
             this.texture = texture;
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
+            this.frameHelper = new FrameHelper(tileWidth, tileHeight);
             this.vbo = new VertexBuffer(6, PrimitiveType.Triangles, VertexBuffer.UsageSpecifier.Static);
         }
 
-        public void SetTextureData(ITexels texture, uint tileWidth, uint tileHeight)
+        public void SetTextureData(ITexels texture, uint tileWidth, uint tileHeight, FrameHelper frameHelper = null)
         {
             this.texture = texture;
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
+
+            if (frameHelper != null)
+                this.frameHelper = frameHelper;
+            else
+                this.frameHelper = new FrameHelper(tileWidth, tileHeight);
+
             this.rebuildVBO();
         }
 
@@ -71,9 +80,6 @@ namespace SFXT.Components.Graphics
             {
                 for(uint j = 0; j < tileData[i].Length; j++)
                 {
-                    textureRow = tileData[i][j] / textureTilesX;
-                    textureColumn = tileData[i][j] % textureTilesX;
-
                     var pos = new Vector2(i * tileWidth * this.Entity.Scale, j * tileHeight * this.Entity.Scale) + drawingRoot;
 
                     var topLeft = new Vector2(pos.X, pos.Y);
@@ -86,18 +92,21 @@ namespace SFXT.Components.Graphics
                     bottomLeft = bottomLeft.RotateAround(center, this.Entity.Rotation);
                     bottomRight = bottomRight.RotateAround(center, this.Entity.Rotation);
 
+                    /*
                     var textureTopLeft = new Vector2(textureRow * tileHeight, textureColumn * tileWidth);
                     var textureTopRight = textureTopLeft + new Vector2(tileWidth, 0);
                     var textureBottomLeft = textureTopLeft + new Vector2(0, tileHeight);
                     var textureBottomRight = textureTopLeft + new Vector2(tileWidth, tileHeight);
+                    */
+                    var tileTexel = this.frameHelper.GetFrameTexel(this.texture, tileData[i][j]);
 
-                    vao.Append(new Vertex(topLeft, textureTopLeft));
-                    vao.Append(new Vertex(topRight, textureTopRight));
-                    vao.Append(new Vertex(bottomRight, textureBottomRight));
+                    vao.Append(new Vertex(topLeft, tileTexel.TopLeft));
+                    vao.Append(new Vertex(topRight, tileTexel.TopRight));
+                    vao.Append(new Vertex(bottomRight, tileTexel.BottomRight));
 
-                    vao.Append(new Vertex(topLeft, textureTopLeft));
-                    vao.Append(new Vertex(bottomLeft, textureBottomLeft));
-                    vao.Append(new Vertex(bottomRight, textureBottomRight));
+                    vao.Append(new Vertex(topLeft, tileTexel.TopLeft));
+                    vao.Append(new Vertex(bottomLeft, tileTexel.BottomLeft));
+                    vao.Append(new Vertex(bottomRight, tileTexel.BottomRight));
                 }
             }
 

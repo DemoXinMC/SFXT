@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SFML.Graphics;
 using SFML.System;
+using SFXT.Util;
 
 namespace SFXT.Graphics
 {
@@ -25,9 +26,9 @@ namespace SFXT.Graphics
         public ushort Width { get; protected set; }
         public ushort Height { get; protected set; }
 
-        public Vector2f TopLeft { get => new SFML.System.Vector2f(this.OffsetX, this.OffsetY); }
-        public Vector2f TopRight { get => new SFML.System.Vector2f(this.OffsetX + this.Width, this.OffsetY); }
-        public Vector2f BottomLeft { get => new SFML.System.Vector2f(this.OffsetX, this.OffsetY + this.Height); }
-        public Vector2f BottomRight { get => new SFML.System.Vector2f(this.OffsetX + this.Width, this.OffsetY + this.Height); }
+        public Vector2 TopLeft { get => new Vector2(this.OffsetX, this.OffsetY); }
+        public Vector2 TopRight { get => new Vector2(this.OffsetX + this.Width, this.OffsetY); }
+        public Vector2 BottomLeft { get => new Vector2(this.OffsetX, this.OffsetY + this.Height); }
+        public Vector2 BottomRight { get => new Vector2(this.OffsetX + this.Width, this.OffsetY + this.Height); }
     }
 }

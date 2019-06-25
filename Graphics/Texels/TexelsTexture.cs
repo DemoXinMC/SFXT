@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using SFML.Graphics;
 using SFML.System;
+using SFXT.Util;
 
 namespace SFXT.Graphics.Texels
 {
@@ -18,9 +19,9 @@ namespace SFXT.Graphics.Texels
         public ushort Width { get => (ushort)this.Texture.Size.X; }
         public ushort Height { get => (ushort)this.Texture.Size.Y; }
 
-        public Vector2f TopLeft { get => new Vector2f(0, 0); }
-        public Vector2f TopRight { get => new Vector2f(this.Width, 0); }
-        public Vector2f BottomLeft { get => new Vector2f(0, this.Height); }
-        public Vector2f BottomRight { get => new Vector2f(this.Width, this.Height); }
+        public Vector2 TopLeft { get => new Vector2(0, 0); }
+        public Vector2 TopRight { get => new Vector2(this.Width, 0); }
+        public Vector2 BottomLeft { get => new Vector2(0, this.Height); }
+        public Vector2 BottomRight { get => new Vector2(this.Width, this.Height); }
     }
 }

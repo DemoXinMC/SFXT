@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFXT.Util;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,9 +12,9 @@ namespace SFXT.Graphics
         ushort OffsetY { get; }
         ushort Width { get; }
         ushort Height { get; }
-        SFML.System.Vector2f TopLeft { get; }
-        SFML.System.Vector2f TopRight { get; }
-        SFML.System.Vector2f BottomLeft { get; }
-        SFML.System.Vector2f BottomRight { get; }
+        Vector2 TopLeft { get; }
+        Vector2 TopRight { get; }
+        Vector2 BottomLeft { get; }
+        Vector2 BottomRight { get; }
     }
 }
