@@ -66,9 +66,6 @@ namespace SFXT.Components.Graphics
             uint textureTilesX = texture.Width / tileWidth;
             uint textureTilesY = texture.Height / tileHeight;
 
-            uint textureRow;
-            uint textureColumn;
-
             VertexArray vao = new VertexArray();
 
             var totalWidth = tileData.Length * tileWidth;
