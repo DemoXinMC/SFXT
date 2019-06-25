@@ -62,12 +62,34 @@ namespace SFXT.Components.Graphics
                 this.animations.Add(name, animation);
         }
 
-        public void GetAnimation(string name)
+        public Animation GetAnimation(string name)
         {
             var success = this.animations.TryGetValue(name, out Animation ret);
 
             if (success) return ret;
             return null;
+        }
+
+        public void Play(Animation animation)
+        {
+            this.CurrentAnimation = animation;
+            this.animationClock.Restart();
+        }
+
+        public void Play(string animationName)
+        {
+            var success = this.animations.TryGetValue(animationName, out var animation);
+
+            if (success)
+            {
+                this.CurrentAnimation = animation;
+                this.animationClock.Restart();
+            }
+        }
+
+        public void Stop()
+        {
+            this.CurrentAnimation = null;
         }
 
         public override void Draw(RenderTarget target, RenderStates renderStates)
@@ -146,8 +168,24 @@ namespace SFXT.Components.Graphics
 
         public class Animation
         {
+            private List<KeyValuePair<uint, SFML.System.Time>> frames = new List<KeyValuePair<uint, SFML.System.Time>>();
+
+            public void AddFrame(uint frameId, SFML.System.Time duration)
+            {
+                this.frames.Add(new KeyValuePair<uint, SFML.System.Time>(frameId, duration));
+            }
+
             public uint GetFrame(SFML.System.Time time)
             {
+                var passedTime = time;
+
+                foreach(var frame in this.frames)
+                {
+                    passedTime -= frame.Value;
+                    if (passedTime < SFML.System.Time.Zero)
+                        return frame.Key;
+                }
+
                 return 0;
             }
         }
