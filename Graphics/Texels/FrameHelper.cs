@@ -25,7 +25,7 @@ namespace SFXT.Graphics.Texels
 
             var frameTopLeft = texture.TopLeft + new Vector2(frameRow * Width, frameColumn * this.Height);
 
-            return new TexelsAtlas(texture.Texture, (ushort)frameTopLeft.Y, (ushort)frameTopLeft.X, (ushort)this.Width, (ushort)this.Height);
+            return new TexelsAtlas(texture.Texture, (ushort)frameTopLeft.X, (ushort)frameTopLeft.Y, (ushort)this.Width, (ushort)this.Height);
         }
     }
 }

@@ -145,8 +145,8 @@ namespace SFXT.Components.Graphics
             if (this.Color == null)
             {
                 this.vao[0] = new Vertex(topLeft, frameTexel.TopLeft);
-                this.vao[2] = new Vertex(topRight, frameTexel.TopRight);
-                this.vao[1] = new Vertex(bottomRight, frameTexel.BottomRight);
+                this.vao[1] = new Vertex(topRight, frameTexel.TopRight);
+                this.vao[2] = new Vertex(bottomRight, frameTexel.BottomRight);
 
                 this.vao[3] = new Vertex(topLeft, frameTexel.TopLeft);
                 this.vao[4] = new Vertex(bottomLeft, frameTexel.BottomLeft);
@@ -155,8 +155,8 @@ namespace SFXT.Components.Graphics
             else
             {
                 this.vao[0] = new Vertex(topLeft, this.Color.Value, frameTexel.TopLeft);
-                this.vao[2] = new Vertex(topRight, this.Color.Value, frameTexel.TopRight);
-                this.vao[1] = new Vertex(bottomRight, this.Color.Value, frameTexel.BottomRight);
+                this.vao[1] = new Vertex(topRight, this.Color.Value, frameTexel.TopRight);
+                this.vao[2] = new Vertex(bottomRight, this.Color.Value, frameTexel.BottomRight);
 
                 this.vao[3] = new Vertex(topLeft, this.Color.Value, frameTexel.TopLeft);
                 this.vao[4] = new Vertex(bottomLeft, this.Color.Value, frameTexel.BottomLeft);

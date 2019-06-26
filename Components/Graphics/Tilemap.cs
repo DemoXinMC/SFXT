@@ -95,7 +95,7 @@ namespace SFXT.Components.Graphics
                     var textureBottomLeft = textureTopLeft + new Vector2(0, tileHeight);
                     var textureBottomRight = textureTopLeft + new Vector2(tileWidth, tileHeight);
                     */
-                    var tileTexel = this.frameHelper.GetFrameTexel(this.texture, tileData[i][j]);
+                    var tileTexel = this.frameHelper.GetFrameTexel(this.texture, this.tileData[i][j]);
 
                     vao.Append(new Vertex(topLeft, tileTexel.TopLeft));
                     vao.Append(new Vertex(topRight, tileTexel.TopRight));
