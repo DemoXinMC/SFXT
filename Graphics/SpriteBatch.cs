@@ -78,9 +78,6 @@ namespace SFXT.Graphics
                     target.Draw(drawing, currentState);
                     drawing.Clear();
 
-                    if(currentState.Texture != null)
-                        Console.WriteLine(batchable.BatchTexture.CPointer + " | " + currentState.Texture.CPointer);
-
                     if (batchable.BatchRenderStates != null)
                     {
                         currentState.BlendMode = batchableState.Value.BlendMode;

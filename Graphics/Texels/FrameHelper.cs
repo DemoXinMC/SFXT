@@ -8,24 +8,24 @@ namespace SFXT.Graphics.Texels
 {
     public class FrameHelper
     {
-        private uint frameWidth;
-        private uint frameHeight;
+        public uint Width { get; protected set; }
+        public uint Height { get; protected set; }
         public FrameHelper(uint frameWidth, uint frameHeight)
         {
-            this.frameWidth = frameWidth;
-            this.frameHeight = frameHeight;
+            this.Width = frameWidth;
+            this.Height = frameHeight;
         }
 
         public virtual TexelsAtlas GetFrameTexel(ITexels texture, uint frameId)
         {
-            var framesWide = texture.Width / frameWidth;
+            var framesWide = texture.Width / this.Width;
 
             var frameRow = frameId / framesWide;
             var frameColumn = frameId % framesWide;
 
-            var frameTopLeft = texture.TopLeft + new Vector2(frameRow * frameHeight, frameColumn * frameWidth);
+            var frameTopLeft = texture.TopLeft + new Vector2(frameRow * Width, frameColumn * this.Height);
 
-            return new TexelsAtlas(texture.Texture, (ushort)frameTopLeft.X, (ushort)frameTopLeft.Y, (ushort)frameWidth, (ushort)frameHeight);
+            return new TexelsAtlas(texture.Texture, (ushort)frameTopLeft.Y, (ushort)frameTopLeft.X, (ushort)this.Width, (ushort)this.Height);
         }
     }
 }

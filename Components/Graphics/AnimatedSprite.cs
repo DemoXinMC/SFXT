@@ -11,7 +11,7 @@ using System.Text;
 
 namespace SFXT.Components.Graphics
 {
-    public class AnimatedSprite : Graphic
+    public class AnimatedSprite : Graphic, IBatchable
     {
         protected ITexels texture;
         protected VertexArray vao;
@@ -32,6 +32,7 @@ namespace SFXT.Components.Graphics
             this.Color = null;
             this.frameHelper = null;
             this.animationClock = new SFML.System.Clock();
+            this.animations = new Dictionary<string, Animation>();
         }
 
         public AnimatedSprite(Entity entity, ITexels texture, uint frameWidth, uint frameHeight) : base(entity)
@@ -40,6 +41,8 @@ namespace SFXT.Components.Graphics
             this.vao = new VertexArray(PrimitiveType.Triangles, 6);
             this.Color = null;
             this.frameHelper = new FrameHelper(frameWidth, frameHeight);
+            this.animationClock = new Clock();
+            this.animations = new Dictionary<string, Animation>();
         }
 
         public void SetTextureData(ITexels texture, uint frameWidth, uint frameHeight, FrameHelper frameHelper = null)
@@ -55,7 +58,7 @@ namespace SFXT.Components.Graphics
         public uint GetCurrentFrame()
         {
             if (this.CurrentAnimation != null)
-                return this.CurrentAnimation.GetFrame(this.animationClock.ElapsedTime);
+                return this.CurrentAnimation.GetFrame(this.animationClock.ElapsedTime * this.playSpeed);
             return 0;
         }
 
@@ -108,8 +111,8 @@ namespace SFXT.Components.Graphics
         protected void updateVAO()
         {
             var pos = this.Entity.Position + this.OriginOffset;
-            var width = this.texture.Width * this.Entity.Scale;
-            var height = this.texture.Height * this.Entity.Scale;
+            var width = this.frameHelper.Width * this.Entity.Scale;
+            var height = this.frameHelper.Height * this.Entity.Scale;
 
             var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
             var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
@@ -136,27 +139,28 @@ namespace SFXT.Components.Graphics
                 bottomRight = temp;
             }
 
-            var frameTexel = this.frameHelper.GetFrameTexel(this.texture, this.CurrentAnimation.GetFrame(this.animationClock.ElapsedTime * this.playSpeed));
+            var currentFrame = this.GetCurrentFrame();
+            var frameTexel = this.frameHelper.GetFrameTexel(this.texture, currentFrame);
 
             if (this.Color == null)
             {
-                this.vao[0] = new Vertex(topLeft, this.texture.TopLeft);
-                this.vao[2] = new Vertex(topRight, this.texture.TopRight);
-                this.vao[1] = new Vertex(bottomRight, this.texture.BottomRight);
+                this.vao[0] = new Vertex(topLeft, frameTexel.TopLeft);
+                this.vao[2] = new Vertex(topRight, frameTexel.TopRight);
+                this.vao[1] = new Vertex(bottomRight, frameTexel.BottomRight);
 
-                this.vao[3] = new Vertex(topLeft, this.texture.TopLeft);
-                this.vao[4] = new Vertex(bottomLeft, this.texture.BottomLeft);
-                this.vao[5] = new Vertex(bottomRight, this.texture.BottomRight);
+                this.vao[3] = new Vertex(topLeft, frameTexel.TopLeft);
+                this.vao[4] = new Vertex(bottomLeft, frameTexel.BottomLeft);
+                this.vao[5] = new Vertex(bottomRight, frameTexel.BottomRight);
             }
             else
             {
-                this.vao[0] = new Vertex(topLeft, this.Color.Value, this.texture.TopLeft);
-                this.vao[2] = new Vertex(topRight, this.Color.Value, this.texture.TopRight);
-                this.vao[1] = new Vertex(bottomRight, this.Color.Value, this.texture.BottomRight);
+                this.vao[0] = new Vertex(topLeft, this.Color.Value, frameTexel.TopLeft);
+                this.vao[2] = new Vertex(topRight, this.Color.Value, frameTexel.TopRight);
+                this.vao[1] = new Vertex(bottomRight, this.Color.Value, frameTexel.BottomRight);
 
-                this.vao[3] = new Vertex(topLeft, this.Color.Value, this.texture.TopLeft);
-                this.vao[4] = new Vertex(bottomLeft, this.Color.Value, this.texture.BottomLeft);
-                this.vao[5] = new Vertex(bottomRight, this.Color.Value, this.texture.BottomRight);
+                this.vao[3] = new Vertex(topLeft, this.Color.Value, frameTexel.TopLeft);
+                this.vao[4] = new Vertex(bottomLeft, this.Color.Value, frameTexel.BottomLeft);
+                this.vao[5] = new Vertex(bottomRight, this.Color.Value, frameTexel.BottomRight);
             }
         }
 
