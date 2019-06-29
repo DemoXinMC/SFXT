@@ -48,6 +48,20 @@ namespace SFXT.Components.Graphics
             this.rebuildVBO();
         }
 
+        public Vector2 GetRandomPoint()
+        {
+            return this.GetRandomPoint(new Random());
+        }
+
+        public Vector2 GetRandomPoint(Random rng)
+        {
+            int mapWidth = (int)this.tileWidth * this.tileData.Length;
+            int mapHeight = (int)this.tileHeight * this.tileData[0].Length;
+            int x = rng.Next((mapWidth / 2) * -1, (mapWidth / 2) + 1);
+            int y = rng.Next((mapHeight / 2) * -1, (mapHeight / 2) + 1);
+            return new Vector2(x * this.Entity.Scale, y * this.Entity.Scale).RotateAround(this.Entity.Position + this.OriginOffset, this.Entity.Rotation);
+        }
+
         public void SetTileData(uint x, uint y, uint tileId)
         {
             if (x >= this.tileData.Length || y >= this.tileData[0].Length)

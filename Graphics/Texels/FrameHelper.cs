@@ -23,7 +23,7 @@ namespace SFXT.Graphics.Texels
             var frameRow = frameId / framesWide;
             var frameColumn = frameId % framesWide;
 
-            var frameTopLeft = texture.TopLeft + new Vector2(frameRow * Width, frameColumn * this.Height);
+            var frameTopLeft = texture.TopLeft + new Vector2(frameColumn * this.Width, frameRow * this.Height);
 
             return new TexelsAtlas(texture.Texture, (ushort)frameTopLeft.X, (ushort)frameTopLeft.Y, (ushort)this.Width, (ushort)this.Height);
         }
