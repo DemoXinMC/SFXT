@@ -73,6 +73,8 @@ namespace SFXT.Util
             return new Vector2(rotatedX, rotatedY);
         }
 
+        public double Magnitude { get => Math.Sqrt(X * X + Y * Y); }
+
         public static Vector2 operator + (Vector2 vector, double amount) => new Vector2(vector.X + amount, vector.Y + amount);
         public static Vector2 operator - (Vector2 vector, double amount) => new Vector2(vector.X - amount, vector.Y - amount);
         public static Vector2 operator * (Vector2 vector, double amount) => new Vector2(vector.X * amount, vector.Y * amount);
