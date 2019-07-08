@@ -45,14 +45,16 @@ namespace SFXT.Components.Graphics
             this.animations = new Dictionary<string, Animation>();
         }
 
-        public void SetTextureData(ITexels texture, uint frameWidth, uint frameHeight, FrameHelper frameHelper = null)
+        public void SetTextureData(ITexels texture, uint frameWidth, uint frameHeight)
         {
             this.texture = texture;
+            this.frameHelper = new FrameHelper(frameWidth, frameHeight);
+        }
 
-            if (frameHelper != null)
-                this.frameHelper = frameHelper;
-            else
-                this.frameHelper = new FrameHelper(frameWidth, frameHeight);
+        public void SetTextureData(ITexels texture, FrameHelper frameHelper)
+        {
+            this.texture = texture;
+            this.frameHelper = frameHelper;
         }
 
         public uint GetCurrentFrame()
@@ -177,11 +179,31 @@ namespace SFXT.Components.Graphics
 
         public class Animation
         {
-            protected List<KeyValuePair<uint, SFML.System.Time>> frames = new List<KeyValuePair<uint, SFML.System.Time>>();
+            private Time animationTime;
+            protected List<KeyValuePair<uint, SFML.System.Time>> frames;
 
-            public void AddFrame(uint frameId, SFML.System.Time duration)
+            public Animation()
+            {
+                animationTime = Time.Zero;
+                frames = new List<KeyValuePair<uint, SFML.System.Time>>();
+            }
+
+            public Animation(Time frameTime, params uint[] frames) : this()
+            {
+                foreach (var frame in frames)
+                    this.AddFrame(frame, frameTime);
+            }
+
+            public Animation(Animation other) : this()
+            {
+                foreach (var frame in other.frames)
+                    this.AddFrame(frame.Key, frame.Value);
+            }
+
+            public virtual void AddFrame(uint frameId, SFML.System.Time duration)
             {
                 this.frames.Add(new KeyValuePair<uint, SFML.System.Time>(frameId, duration));
+                animationTime += duration;
             }
 
             public virtual uint GetFrame(Time time)
@@ -197,10 +219,31 @@ namespace SFXT.Components.Graphics
 
                 return this.frames.Last().Key;
             }
+
+            public virtual bool IsFinished(Time time)
+            {
+                return time >= this.animationTime;
+            }
         }
 
         public class LoopingAnimation : Animation
         {
+            public LoopingAnimation() : base() { }
+
+            public LoopingAnimation(Time frameTime, params uint[] frames) : this()
+            {
+                foreach (var frame in frames)
+                    this.AddFrame(frame, frameTime);
+            }
+
+            public LoopingAnimation(Time frameTime, uint startFrame, uint frameCount) : this()
+            {
+                for (uint i = 0; i < frameCount; i++)
+                    this.AddFrame(startFrame + i, frameTime);
+            }
+
+            public LoopingAnimation(Animation other) : base(other) { }
+
             public override uint GetFrame(Time time)
             {
                 var passedTime = time;
@@ -217,6 +260,8 @@ namespace SFXT.Components.Graphics
 
                 return 0;
             }
+
+            public override bool IsFinished(Time time) => false;
         }
     }
 }
