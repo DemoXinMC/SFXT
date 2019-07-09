@@ -111,7 +111,6 @@ namespace SFXT
 
             // Maybe switch this to a predicate to allow more use of the "Generic" Activity
             var ordered = graphicComponents.OrderBy(item => item.Layer).ThenBy(item => item.Entity.Y);
-            
 
             foreach (var graphic in ordered)
             {
@@ -122,13 +121,11 @@ namespace SFXT
                 this.spriteBatch.Add(graphic);
             }
 
-            //spriteBatch.Draw(target, states, false);
-
             var previousView = target.GetView();
             foreach (var view in this.CameraManager.Views)
             {
                 target.SetView(view.View);
-                spriteBatch.Draw(target, view.RenderStates);
+                spriteBatch.Draw(target, view.RenderStates, false);
             }
             target.SetView(previousView);
 

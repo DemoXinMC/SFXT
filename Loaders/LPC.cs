@@ -60,9 +60,9 @@ namespace SFXT.Loaders
 
         static LPC()
         {
-            FrameTime = SFML.System.Time.FromSeconds(1 / 15);
+            FrameTime = SFML.System.Time.FromMilliseconds(100);
 
-            IdleLoop = new LoopingAnimation(FrameTime, (13 * 10), 6);
+            IdleLoop = new LoopingAnimation(FrameTime, (13 * 10), 1);
 
             WalkUp = new LoopingAnimation(FrameTime, (13 * 8), 9);
             WalkDown = new LoopingAnimation(FrameTime, (13 * 10) , 9);
