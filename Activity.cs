@@ -58,6 +58,27 @@ namespace SFXT
             return !cancel;
         }
 
+        public T GetEntity<T>() where T : Entity
+        {
+            foreach (var entity in this.entities.Values)
+                if (entity is T)
+                    return (T)entity;
+            return null;
+        }
+
+        public List<T> GetEntities<T>() where T : Entity
+        {
+            var retValue = new List<T>();
+
+            foreach (var entity in this.entities.Values)
+                if (entity is T)
+                    retValue.Add((T)entity);
+
+            if (retValue.Count > 0)
+                return retValue;
+            return null;
+        }
+
         private uint nextEntityId
         {
             get { return nextEntityIdInternal++; }
