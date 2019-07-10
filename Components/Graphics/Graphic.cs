@@ -1,4 +1,4 @@
-﻿namespace SFXT.Graphics
+﻿namespace SFXT.Components.Graphics
 {
     abstract public class Graphic : Component
     {

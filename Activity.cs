@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SFXT.Components.Graphics;
 using SFXT.Graphics;
 using System;
 using System.Collections.Generic;

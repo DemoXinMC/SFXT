@@ -116,10 +116,18 @@ namespace SFXT.Components.Graphics
             var width = this.frameHelper.Width * this.Entity.Scale;
             var height = this.frameHelper.Height * this.Entity.Scale;
 
-            var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
-            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
-            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.Entity.Rotation);
-            var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.Entity.Rotation);
+            var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2);
+            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2);
+            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2);
+            var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2);
+
+            if(this.Entity.Rotation != 0)
+            {
+                topLeft = topLeft.RotateAround(pos, this.Entity.Rotation);
+                topRight = topRight.RotateAround(pos, this.Entity.Rotation);
+                bottomLeft = bottomLeft.RotateAround(pos, this.Entity.Rotation);
+                bottomRight = bottomRight.RotateAround(pos, this.Entity.Rotation);
+            }
 
             if (this.FlipHorizontal)
             {
@@ -179,7 +187,7 @@ namespace SFXT.Components.Graphics
 
         public class Animation
         {
-            private Time animationTime;
+            protected Time animationTime;
             protected List<KeyValuePair<uint, SFML.System.Time>> frames;
 
             public Animation()
@@ -246,16 +254,13 @@ namespace SFXT.Components.Graphics
 
             public override uint GetFrame(Time time)
             {
-                var passedTime = time;
+                var passedTime = time % this.animationTime;
 
-                while (passedTime > Time.Zero)
+                foreach (var frame in this.frames)
                 {
-                    foreach (var frame in this.frames)
-                    {
-                        passedTime -= frame.Value;
-                        if (passedTime < Time.Zero)
-                            return frame.Key;
-                    }
+                    passedTime -= frame.Value;
+                    if (passedTime < Time.Zero)
+                        return frame.Key;
                 }
 
                 return 0;

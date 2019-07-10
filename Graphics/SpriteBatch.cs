@@ -1,4 +1,5 @@
 ﻿using SFML.Graphics;
+using SFXT.Components.Graphics;
 using SFXT.Util;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace SFXT.Graphics
     /// </summary>
     public class SpriteBatch
     {
-        private List<SFXT.Graphics.Graphic> graphicList;
+        private List<Graphic> graphicList;
 
         /// <summary>
         /// Creates a new SpriteBatch
@@ -20,7 +21,7 @@ namespace SFXT.Graphics
         /// <param name="buffer">The expected number of Graphics to be drawn by this batch.</param>
         public SpriteBatch(uint buffer = 5000)
         {
-            this.graphicList = new List<SFXT.Graphics.Graphic>((int)buffer);
+            this.graphicList = new List<Graphic>((int)buffer);
         }
 
         /// <summary>

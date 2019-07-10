@@ -121,7 +121,7 @@ namespace SFXT
                 if (renderTimes.Count == 0)
                     return Time.Zero;
 
-                return totalTime / updateTimes.Count;
+                return totalTime / renderTimes.Count;
             }
         }
 

@@ -10,6 +10,8 @@ namespace SFXT.Util
         public double X { get; set; }
         public double Y { get; set; }
 
+        private const double pi180 = Math.PI / 180D;
+
         public Vector2(double x, double Y)
         {
             this.X = x;
@@ -65,7 +67,7 @@ namespace SFXT.Util
 
         public Vector2 RotateAround(Vector2 origin, double angle)
         {
-            angle = (angle) * (Math.PI / 180);
+            angle = (angle) * pi180;
 
             var rotatedX = Math.Cos(angle) * (this.X - origin.X) - Math.Sin(angle) * (this.Y - origin.Y) + origin.X;
             var rotatedY = Math.Sin(angle) * (this.X - origin.X) + Math.Cos(angle) * (this.Y - origin.Y) + origin.Y;
