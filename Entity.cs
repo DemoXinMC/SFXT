@@ -35,10 +35,9 @@ namespace SFXT
             }
         }
 
-        public float SizeX { get => this.Size.X; }
-        public float SizeY { get => this.Size.Y; }
-
         public Vector2 Position;
+
+        /*
         public SFML.System.Vector2f Size
         {
             get
@@ -56,6 +55,7 @@ namespace SFXT
                 return new SFML.Graphics.IntRect(0, 0, 0, 0);
             }
         }
+        */
 
         public SFML.Graphics.Transform Transform { get; protected set; }
 

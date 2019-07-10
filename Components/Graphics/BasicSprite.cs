@@ -36,12 +36,20 @@ namespace SFXT.Components.Graphics
             var width = this.texture.Width * this.Entity.Scale;
             var height = this.texture.Height * this.Entity.Scale;
 
-            var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
-            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2).RotateAround(pos, this.Entity.Rotation);
-            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.Entity.Rotation);
-            var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2).RotateAround(pos, this.Entity.Rotation);
+            var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2);
+            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2);
+            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2);
+            var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2);
 
-            if(this.FlipHorizontal)
+            if (this.Entity.Rotation != 0)
+            {
+                topLeft = topLeft.RotateAround(pos, this.Entity.Rotation);
+                topRight = topRight.RotateAround(pos, this.Entity.Rotation);
+                bottomLeft = bottomLeft.RotateAround(pos, this.Entity.Rotation);
+                bottomRight = bottomRight.RotateAround(pos, this.Entity.Rotation);
+            }
+
+            if (this.FlipHorizontal)
             {
                 var temp = topLeft;
                 topLeft = topRight;

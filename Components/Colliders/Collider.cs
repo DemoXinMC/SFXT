@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SFXT.Components
+namespace SFXT.Components.Colliders
 {
     public class Collider : Component
     {
