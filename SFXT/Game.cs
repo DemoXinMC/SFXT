@@ -1,4 +1,6 @@
 ﻿using SFML.System;
+using SFML.Window;
+using SFML.Graphics;
 using SFXT.Util;
 using System;
 using System.Collections.Generic;
@@ -14,14 +16,14 @@ namespace SFXT
         /// </summary>
         public string Title
         {
-            get { return this.title; }
+            get { return _title; }
             set
             {
-                this.title = value;
-                this.Window?.SetTitle(value);
+                _title = value;
+                Window?.SetTitle(value);
             }
         }
-        private string title;
+        private string _title;
 
         /// <summary>The raw SFML Window for the Game.</summary>
         public SFML.Graphics.RenderWindow Window { get; private set; }
@@ -33,23 +35,23 @@ namespace SFXT
         {
             get
             {
-                return this.fullscreen;
+                return _fullscreen;
             }
             set
             {
-                var oldValue = this.fullscreen;
-                this.fullscreen = value;
+                var oldValue = _fullscreen;
+                _fullscreen = value;
 
-                if(this.fullscreen != oldValue)
-                    this.CreateWindow();
+                if(_fullscreen != oldValue)
+                    CreateWindow();
             }
         }
-        private bool fullscreen;
+        private bool _fullscreen;
 
         /// <summary>The Height/Width of the Game Window</summary>
         public Vector2 Dimensions { get; private set; }
         /// <summary>The X/Y position of the Game Window</summary>
-        public SFML.System.Vector2i Location { get; private set; }
+        public Vector2 Location { get; private set; }
 
         /// <summary>The amount of seconds between this update and the last</summary>
         public double Delta { get; private set; }
@@ -73,21 +75,33 @@ namespace SFXT
                 if((fileAttr & FileAttributes.Directory) != FileAttributes.Directory)
                     throw new ArgumentException("Not a directory.", "dir");
             }
-            SaveDirectory = Path.Combine(this.GameDirectory, "save");
-            AssetDirectory = Path.Combine(this.GameDirectory, "assets");
+            SaveDirectory = Path.Combine(GameDirectory, "save");
+            AssetDirectory = Path.Combine(GameDirectory, "assets");
         }
 
         /// <summary>The target number of Updates per second. <para>Default: 25</para></summary>
-        public uint TPS;
+        public uint TPS
+        {
+            get { return _tps; }
+            set
+            {
+                if (value < 1)
+                    throw new ArgumentException("Tick Rate cannot be less than 1.", "FPS");
+                _tps = value;
+            }
+        }
+        private uint _tps;
+
         /// <summary>The target number of frames to Render per second. <para>Default: 60</para></summary>
         public uint FPS
         {
             get { return _fps; }
             set
             {
+                if (value < 0)
+                    throw new ArgumentException("Target FPS cannot be less than 0.", "FPS");
                 _fps = value;
-                if(value > 0)
-                    Window?.SetFramerateLimit(value);
+                Window?.SetFramerateLimit(value);
             }
         }
         private uint _fps;
@@ -144,64 +158,64 @@ namespace SFXT
             var updateClock = new Clock();
             var renderClock = new Clock();
 
-            this.GameTime = new Clock();
-            this.GameTime.Restart();
+            GameTime = new Clock();
+            GameTime.Restart();
             updateClock.Restart();
-            var updateTime = this.GameTime.ElapsedTime;
+            var updateTime = GameTime.ElapsedTime;
 
-            var tickTimer = (timeSecond / this.TPS);
+            var tickTimer = (timeSecond / TPS);
 
-            while (this.Window != null)
+            while (Window != null)
             {
-                while(this.GameTime.ElapsedTime > updateTime)
+                while(GameTime.ElapsedTime > updateTime)
                 {  
-                    this.Delta = updateClock.ElapsedTime.AsSeconds();
+                    Delta = updateClock.ElapsedTime.AsSeconds();
                     updateClock.Restart();
-                    this.Update();
-                    this.updateTimes.Enqueue(updateClock.ElapsedTime);
+                    Update();
+                    updateTimes.Enqueue(updateClock.ElapsedTime);
                     updateTime += tickTimer;
                 }
 
                 
-                this.Interpolation = updateClock.ElapsedTime.AsSeconds();
+                Interpolation = updateClock.ElapsedTime.AsSeconds();
                 renderClock.Restart();
                 Debug.FrameCount++;
-                this.Render();
-                this.renderTimes.Enqueue(renderClock.Restart());
+                Render();
+                renderTimes.Enqueue(renderClock.Restart());
 
-                while(this.updateTimes.Peek() < GameTime.ElapsedTime - Time.FromSeconds(5))
-                    this.updateTimes.Dequeue();
+                while(updateTimes.Peek() < GameTime.ElapsedTime - Time.FromSeconds(5))
+                    updateTimes.Dequeue();
                 while(this.renderTimes.Peek() < GameTime.ElapsedTime - Time.FromSeconds(5))
-                    this.renderTimes.Dequeue();
+                    renderTimes.Dequeue();
             }
         }
 
         public Game()
         {
-            this.activities = new Stack<Activity>();
-            this.renderTimes = new Queue<Time>();
-            this.updateTimes = new Queue<Time>();
+            activities = new Stack<Activity>();
+            renderTimes = new Queue<Time>();
+            updateTimes = new Queue<Time>();
 
-            this.Window = null;
-            this.Dimensions = new Vector2i(360, 240);
-            this.Title = "SFXT Game";
-            this.Headless = false;
+            Window = null;
+            Dimensions = new Vector2i(360, 240);
+            Title = "SFXT Game";
+            Headless = false;
 
-            this.TPS = 20;
-            this.FPS = 60;
+            TPS = 20;
+            FPS = 60;
 
-            this.SetRootDir(null);
+            SetRootDir(null);
         }
 
         public Game(string title, uint width, uint height) : this(title, width, height, 25, 60) { }
 
         public Game(string title, uint width, uint height, uint targetTPS, uint targetFPS) : this()
         {
-            this.Title = title;
-            this.Dimensions = new Vector2i((int)width, (int)height);
+            Title = title;
+            Dimensions = new Vector2i((int)width, (int)height);
 
-            this.TPS = targetTPS;
-            this.FPS = targetFPS;
+            TPS = targetTPS;
+            FPS = targetFPS;
         }
 
         private Stack<Activity> activities;
@@ -212,69 +226,72 @@ namespace SFXT
 
         public void PushActivity(Activity activity)
         {
-            this.OnActivityPush?.Invoke(activity);
-            this.activities.Push(activity);
+            OnActivityPush?.Invoke(activity);
+            activities.Push(activity);
         }
 
         public Activity PopActivity()
         {
-            var activity = this.activities.Pop();
-            this.OnActivityPop?.Invoke(activity);
+            var activity = activities.Pop();
+            OnActivityPop?.Invoke(activity);
 
             return activity;
         }
 
         public Activity PopTo(Activity target)
         {
-            if (!this.activities.Contains(target))
+            if (!activities.Contains(target))
                 return null;
 
-            while(this.activities.Peek() != target)
+            while(activities.Peek() != target)
             {
-                var popped = this.activities.Pop();
-                this.OnActivityPop?.Invoke(popped);
+                var popped = activities.Pop();
+                OnActivityPop?.Invoke(popped);
             }
 
-            return this.activities.Peek();
+            return activities.Peek();
         }
 
         private void CreateWindow()
         {
-            this.Window?.Close();
+            Window?.Close();
 
             var videoMode = new SFML.Window.VideoMode((uint)this.Dimensions.X, (uint)this.Dimensions.Y);
-            this.Window = new SFML.Graphics.RenderWindow(videoMode, this.Title, this.Fullscreen ? SFML.Window.Styles.Fullscreen : SFML.Window.Styles.None);
-            this.Window.Position = this.Location == null ? this.Location : new Vector2i((int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Width / 2) - (videoMode.Width / 2)), (int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Height / 2) - (videoMode.Height / 2)));
+            Window = new SFML.Graphics.RenderWindow(videoMode, this.Title, this.Fullscreen ? SFML.Window.Styles.Fullscreen : SFML.Window.Styles.None);
+            Window.Position = this.Location == null ? this.Location : new Vector2i((int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Width / 2) - (videoMode.Width / 2)), (int)Math.Floor(((double)SFML.Window.VideoMode.DesktopMode.Height / 2) - (videoMode.Height / 2)));
 
-            if(this.FPS > 0)
-                this.Window.SetFramerateLimit(this.FPS);
+            if(FPS > 0)
+                Window.SetFramerateLimit(FPS);
 
-            this.WindowCreated?.Invoke(videoMode.Width, videoMode.Height);
-            this.Window.Display();
+            WindowCreated?.Invoke(videoMode.Width, videoMode.Height);
+            Window.Display();
         }
 
         private void Update()
         {
-            /*
+            
             if(this.activities.Count == 0)
-                throw new ApplicationException("SFXT Update requires an active Activity.");*/
+                throw new ApplicationException("SFXT Update requires an active Activity.");
 
-            if(this.Window == null || !this.Window.IsOpen)
-                throw new ApplicationException("SFXT Update cannot begin without a valid Window.");
+            if (!Headless)
+            {
+                if (Window == null || !Window.IsOpen)
+                    throw new ApplicationException("SFXT Update cannot begin without a valid Window.");
 
-            this.Window.DispatchEvents();
+                Window.DispatchEvents();
 
-            /*
-             * this.OnInputBegin();
-             * this.Input.Update();
-             * this.OnInputEnd();
-             */
+                /*
+                 * this.OnInputBegin();
+                 * this.Input.Update();
+                 * this.OnInputEnd();
+                 */
+            }
 
-            this.OnUpdateBegin?.Invoke();
+            OnUpdateBegin?.Invoke();
 
             var updateList = new Stack<Activity>();
 
-            foreach(var activity in this.activities)
+            foreach(var activity in activities)
             {
                 updateList.Push(activity);
                 if(!activity.ShouldBelowActivitiesUpdate())
@@ -284,32 +301,32 @@ namespace SFXT
             foreach(var activity in updateList.Reverse())
                 activity.Update();
 
-            this.OnUpdateEnd?.Invoke();
+            OnUpdateEnd?.Invoke();
         }
 
         private void Render()
         {
-            if(this.Window == null || !this.Window.IsOpen)
+            if(Window == null || !Window.IsOpen)
                 throw new ApplicationException("SFXT Render cannot begin without a valid Window.");
 
-            this.OnRenderBegin?.Invoke();
+            OnRenderBegin?.Invoke();
 
             var renderList = new Stack<Activity>();
 
-            foreach(var activity in this.activities)
+            foreach(var activity in activities)
             {
                 renderList.Push(activity);
                 if(!activity.ShouldBelowActivitiesRender())
                     break;
             }
 
-            this.Window.Clear(new SFML.Graphics.Color(100, 149, 237));
+            Window.Clear(new SFML.Graphics.Color(100, 149, 237));
 
             foreach (var activity in renderList.Reverse())
-                activity.Render(this.Window, SFML.Graphics.RenderStates.Default);
+                activity.Render(Window, SFML.Graphics.RenderStates.Default);
 
-            this.OnRenderEnd?.Invoke();
-            this.Window.Display();
+            OnRenderEnd?.Invoke();
+            Window.Display();
         }
 
         public delegate void WindowCreatedHandler(uint width, uint height);
