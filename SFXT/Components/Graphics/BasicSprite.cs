@@ -11,14 +11,14 @@ namespace SFXT.Components.Graphics
     public class BasicSprite : Graphic, IBatchable
     {
         protected ITexels texture;
-        protected VertexArray vao;
+        protected Vertex[] vao;
 
         public Color? Color { get; set; }
 
         public BasicSprite(Entity entity, ITexels texture) : base(entity)
         {
             this.texture = texture;
-            this.vao = new VertexArray(PrimitiveType.Triangles, 6);
+            this.vao = new Vertex[6];
             this.Color = null;
         }
 
@@ -27,7 +27,7 @@ namespace SFXT.Components.Graphics
             this.updateVAO();
             var state = new RenderStates(renderStates);
             state.Texture = this.texture.Texture;
-            target.Draw(this.vao, state);
+            target.Draw(this.vao, SFML.Graphics.PrimitiveType.Triangles, state);
         }
 
         protected void updateVAO()
@@ -37,9 +37,10 @@ namespace SFXT.Components.Graphics
             var height = this.texture.Height * this.Entity.Scale;
 
             var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2);
-            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2);
-            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2);
             var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2);
+
+            var topRight = new Vector2(bottomRight.X, topLeft.Y);
+            var bottomLeft = new Vector2(topLeft.X, bottomRight.Y);
 
             if (this.Entity.Rotation != 0)
             {
@@ -93,7 +94,7 @@ namespace SFXT.Components.Graphics
 
         public RenderStates? BatchRenderStates { get => null; }
         public Texture BatchTexture { get => this.texture.Texture; }
-        public VertexArray BatchVertexes
+        public Vertex[] BatchVertexes
         {
             get
             {
@@ -101,5 +102,7 @@ namespace SFXT.Components.Graphics
                 return this.vao;
             }
         }
+
+        public SFML.Graphics.PrimitiveType BatchPrimitiveType => PrimitiveType.Triangles;
     }
 }

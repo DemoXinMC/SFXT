@@ -19,7 +19,7 @@ namespace SFXT.Graphics
         /// Creates a new SpriteBatch
         /// </summary>
         /// <param name="buffer">The expected number of Graphics to be drawn by this batch.</param>
-        public SpriteBatch(uint buffer = 5000)
+        public SpriteBatch(uint buffer = 1000)
         {
             this.graphicList = new List<Graphic>((int)buffer);
         }
@@ -41,7 +41,8 @@ namespace SFXT.Graphics
         {
             RenderStates currentState = new RenderStates(states);
 
-            VertexArray drawing = new VertexArray(PrimitiveType.Triangles);
+            List<Vertex> drawing = new List<Vertex>(this.graphicList.Count * 6);
+            PrimitiveType drawingType = PrimitiveType.Triangles;
 
             foreach(var graphic in graphicList)
             {
@@ -50,7 +51,7 @@ namespace SFXT.Graphics
                 if(batchable == null)
                 {
                     Debug.DrawCalls++;
-                    target.Draw(drawing, currentState);
+                    target.Draw(drawing.ToArray(), drawingType, currentState);
                     drawing.Clear();
                     Debug.DrawCalls++;
                     graphic.Draw(target, states);
@@ -73,10 +74,13 @@ namespace SFXT.Graphics
                 if(batchableState.Value.Shader != currentState.Shader)
                     drawBatch = true;
 
+                if (batchable.BatchPrimitiveType != drawingType)
+                    drawBatch = true;
+
                 if(drawBatch)
                 {
                     Debug.DrawCalls++;
-                    target.Draw(drawing, currentState);
+                    target.Draw(drawing.ToArray(), drawingType, currentState);
                     drawing.Clear();
 
                     if (batchable.BatchRenderStates != null)
@@ -85,23 +89,14 @@ namespace SFXT.Graphics
                         currentState.Shader = batchableState.Value.Shader;
                     }
                     currentState.Texture = batchable.BatchTexture;
+                    drawingType = batchable.BatchPrimitiveType;
                 }
 
-                var batchVertexes = batchable.BatchVertexes;
-
-                if (batchVertexes.PrimitiveType != drawing.PrimitiveType)
-                {
-                    Debug.DrawCalls++;
-                    target.Draw(drawing, currentState);
-                    drawing.Clear();
-                    drawing.PrimitiveType = batchVertexes.PrimitiveType;
-                }
-                for (uint i = 0; i < batchVertexes.VertexCount; i++)
-                    drawing.Append(batchVertexes[i]);
+                drawing.AddRange(batchable.BatchVertexes);
             }
 
             Debug.DrawCalls++;
-            target.Draw(drawing, currentState);
+            target.Draw(drawing.ToArray(), drawingType, currentState);
             if(clearGraphicList)
                 this.graphicList.Clear();
         }

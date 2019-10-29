@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SFXT.Util
 {
-    public class Vector2
+    public struct Vector2
     {
         public double X { get; set; }
         public double Y { get; set; }

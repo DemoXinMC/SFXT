@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFXT", "SFXT.csproj", "{3A665B55-1979-49F7-BA0C-AFACA639779F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFXT", "SFXT\SFXT.csproj", "{3A665B55-1979-49F7-BA0C-AFACA639779F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFXT Test", "..\..\SFXTPlayground\SFXT Test\SFXT Test.csproj", "{638A4920-C9C8-451B-B6F5-1EB387E2601C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFXT Test", "Test\SFXT Test.csproj", "{638A4920-C9C8-451B-B6F5-1EB387E2601C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +23,14 @@ Global
 		{3A665B55-1979-49F7-BA0C-AFACA639779F}.Release|x64.Build.0 = Release|x64
 		{3A665B55-1979-49F7-BA0C-AFACA639779F}.Release|x86.ActiveCfg = Release|x86
 		{3A665B55-1979-49F7-BA0C-AFACA639779F}.Release|x86.Build.0 = Release|x86
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x64.ActiveCfg = Debug|x64
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x64.Build.0 = Debug|x64
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x86.ActiveCfg = Debug|x86
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x86.Build.0 = Debug|x86
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x64.ActiveCfg = Release|x64
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x64.Build.0 = Release|x64
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x86.ActiveCfg = Release|x86
-		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x86.Build.0 = Release|x86
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x64.Build.0 = Debug|Any CPU
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Debug|x86.Build.0 = Debug|Any CPU
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x64.ActiveCfg = Release|Any CPU
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x64.Build.0 = Release|Any CPU
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x86.ActiveCfg = Release|Any CPU
+		{638A4920-C9C8-451B-B6F5-1EB387E2601C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

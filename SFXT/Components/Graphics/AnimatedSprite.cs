@@ -14,7 +14,7 @@ namespace SFXT.Components.Graphics
     public class AnimatedSprite : Graphic, IBatchable
     {
         protected ITexels texture;
-        protected VertexArray vao;
+        protected Vertex[] vao;
 
         protected FrameHelper frameHelper;
 
@@ -28,7 +28,7 @@ namespace SFXT.Components.Graphics
         public AnimatedSprite(Entity entity) : base(entity)
         {
             this.texture = null;
-            this.vao = new VertexArray(PrimitiveType.Triangles, 6);
+            this.vao = new Vertex[6];
             this.Color = null;
             this.frameHelper = null;
             this.animationClock = new SFML.System.Clock();
@@ -38,7 +38,7 @@ namespace SFXT.Components.Graphics
         public AnimatedSprite(Entity entity, ITexels texture, uint frameWidth, uint frameHeight) : base(entity)
         {
             this.texture = texture;
-            this.vao = new VertexArray(PrimitiveType.Triangles, 6);
+            this.vao = new Vertex[6];
             this.Color = null;
             this.frameHelper = new FrameHelper(frameWidth, frameHeight);
             this.animationClock = new Clock();
@@ -107,7 +107,7 @@ namespace SFXT.Components.Graphics
             this.updateVAO();
             var state = new RenderStates(renderStates);
             state.Texture = this.texture.Texture;
-            target.Draw(this.vao, state);
+            target.Draw(this.vao, PrimitiveType.Triangles, state);
         }
 
         protected void updateVAO()
@@ -117,11 +117,12 @@ namespace SFXT.Components.Graphics
             var height = this.frameHelper.Height * this.Entity.Scale;
 
             var topLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y - height / 2);
-            var topRight = new Vector2((int)pos.X + width / 2, (int)pos.Y - height / 2);
-            var bottomLeft = new Vector2((int)pos.X - width / 2, (int)pos.Y + height / 2);
             var bottomRight = new Vector2((int)pos.X + width / 2, (int)pos.Y + height / 2);
 
-            if(this.Entity.Rotation != 0)
+            var topRight = new Vector2(bottomRight.X, topLeft.Y);
+            var bottomLeft = new Vector2(topLeft.X, bottomRight.Y);
+
+            if (this.Entity.Rotation != 0)
             {
                 topLeft = topLeft.RotateAround(pos, this.Entity.Rotation);
                 topRight = topRight.RotateAround(pos, this.Entity.Rotation);
@@ -176,7 +177,7 @@ namespace SFXT.Components.Graphics
 
         public RenderStates? BatchRenderStates { get => null; }
         public Texture BatchTexture { get => this.texture.Texture; }
-        public VertexArray BatchVertexes
+        public Vertex[] BatchVertexes
         {
             get
             {
@@ -184,6 +185,8 @@ namespace SFXT.Components.Graphics
                 return this.vao;
             }
         }
+
+        public SFML.Graphics.PrimitiveType BatchPrimitiveType => PrimitiveType.Triangles;
 
         public class Animation
         {
