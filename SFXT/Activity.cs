@@ -22,7 +22,7 @@ namespace SFXT
         {
             bool cancel = false;
 
-            this.OnEntityQueuedAdd?.Invoke(entity, ref cancel);
+            OnEntityQueuedAdd?.Invoke(entity, ref cancel);
 
             if(!cancel)
                 entitiesToAdd.Add(entity);

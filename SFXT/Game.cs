@@ -9,6 +9,9 @@ namespace SFXT
 {
     public class Game
     {
+        /// <summary>
+        /// The Title of the Game's Window
+        /// </summary>
         public string Title
         {
             get { return this.title; }
@@ -23,6 +26,9 @@ namespace SFXT
         /// <summary>The raw SFML Window for the Game.</summary>
         public SFML.Graphics.RenderWindow Window { get; private set; }
 
+        /// <summary>
+        /// Whether the Game is running in Fullscreen mode.
+        /// </summary>
         public bool Fullscreen
         {
             get
@@ -60,15 +66,15 @@ namespace SFXT
         public void SetRootDir(string dir = null)
         {
             if(dir == null)
-                this.GameDirectory = Directory.GetCurrentDirectory();
+                GameDirectory = Directory.GetCurrentDirectory();
             else
             {
                 var fileAttr = File.GetAttributes(dir);
                 if((fileAttr & FileAttributes.Directory) != FileAttributes.Directory)
                     throw new ArgumentException("Not a directory.", "dir");
             }
-            this.SaveDirectory = Path.Combine(this.GameDirectory, "save");
-            this.AssetDirectory = Path.Combine(this.GameDirectory, "assets");
+            SaveDirectory = Path.Combine(this.GameDirectory, "save");
+            AssetDirectory = Path.Combine(this.GameDirectory, "assets");
         }
 
         /// <summary>The target number of Updates per second. <para>Default: 25</para></summary>
@@ -76,31 +82,31 @@ namespace SFXT
         /// <summary>The target number of frames to Render per second. <para>Default: 60</para></summary>
         public uint FPS
         {
-            get { return this.fps; }
+            get { return _fps; }
             set
             {
-                this.fps = value;
+                _fps = value;
                 if(value > 0)
-                    this.Window?.SetFramerateLimit(value);
+                    Window?.SetFramerateLimit(value);
             }
         }
-        private uint fps;
+        private uint _fps;
 
         /// <summary>The Time object representing the amount of time the most recent Update took.</summary>
-        public SFML.System.Time UpdateTime { get { return updateTimes.Peek(); } }
-        private Queue<SFML.System.Time> updateTimes;
+        public Time UpdateTime { get { return updateTimes.Reverse().First(); } }
+        private Queue<Time> updateTimes;
         /// <summary>The Time object representing the amount of time the most recent Render took.</summary>
-        public SFML.System.Time RenderTime { get { return renderTimes.Peek(); } }
-        private Queue<SFML.System.Time> renderTimes;
+        public Time RenderTime { get { return renderTimes.Reverse().First(); } }
+        private Queue<Time> renderTimes;
 
         /// <summary>The Time object representing how long the game has been running.</summary>
-        public SFML.System.Clock GameTime;
+        public Clock GameTime;
 
-        public SFML.System.Time AverageUpdateTime
+        public Time AverageUpdateTime
         {
             get
             {
-                var totalTime = new SFML.System.Time();
+                var totalTime = new Time();
                 foreach(var time in updateTimes)
                     totalTime += time;
 
@@ -110,11 +116,11 @@ namespace SFXT
                 return totalTime / updateTimes.Count;
             }
         }
-        public SFML.System.Time AverageRenderTime
+        public Time AverageRenderTime
         {
             get
             {
-                var totalTime = new SFML.System.Time();
+                var totalTime = new Time();
                 foreach(var time in renderTimes)
                     totalTime += time;
 
@@ -128,15 +134,15 @@ namespace SFXT
         public readonly bool Headless;
 
         /// <summary>
-        /// The main game loop.  Call to begin the game.
+        /// The main Game loop.  Call to begin the game.
         /// </summary>
         public void Run()
         {
-            this.CreateWindow();
+            CreateWindow();
 
-            var timeSecond = SFML.System.Time.FromSeconds(1);
-            var updateClock = new SFML.System.Clock();
-            var renderClock = new SFML.System.Clock();
+            var timeSecond = Time.FromSeconds(1);
+            var updateClock = new Clock();
+            var renderClock = new Clock();
 
             this.GameTime = new Clock();
             this.GameTime.Restart();
@@ -163,9 +169,9 @@ namespace SFXT
                 this.Render();
                 this.renderTimes.Enqueue(renderClock.Restart());
 
-                while(this.updateTimes.Count > this.TPS * 10)
+                while(this.updateTimes.Peek() < GameTime.ElapsedTime - Time.FromSeconds(5))
                     this.updateTimes.Dequeue();
-                while(this.renderTimes.Count > this.FPS + 1 * 10)
+                while(this.renderTimes.Peek() < GameTime.ElapsedTime - Time.FromSeconds(5))
                     this.renderTimes.Dequeue();
             }
         }

@@ -5,8 +5,12 @@
     <Version>0.0.1</Version>
     <Authors>DemoXin (Donald Eaton)</Authors>
     <Company>XinWorks Laboratory</Company>
-    <Copyright>2018 XinWorks Laboratory</Copyright>
+    <Copyright>2019 XinWorks Laboratory</Copyright>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/DemoXinMC/SFXT</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -41,6 +45,13 @@
 
   <ItemGroup>
     <PackageReference Include="SFML.Graphics" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
